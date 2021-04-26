@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:tindog/widgets/btn_azul.dart';
 
 
+
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,7 @@ class HomePage extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 30.0),
               child: BtnAzul(texto: "botón personalizado", onPressed: () {
+                Navigator.pushNamed(context, 'registromascota');
 
               }),
             ),
@@ -28,10 +30,13 @@ class HomePage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 30.0),
               child: Text('Pueden refactorizar componenetes al crear sus propios widgets en la carpeta widgets',
               style: TextStyle(fontSize: 20),)
-            )
+            ),
           ],
         )
       ),
     );
   }
+
+
+
 }
