@@ -42,17 +42,14 @@ enum SingingCharacter { macho, hembra }
           SliverList(
             delegate: SliverChildListDelegate(
               [
+                SizedBox(height: 40),
+                _Titulo(),
                 _CargarImagen(),
-                _CargarImagen(),
-                _CargarImagen(),
-                _CargarImagen(),
-                _CargarImagen(),
-                _CargarImagen(),
-                _CargarImagen(),
-                _CargarImagen(),
-                _CargarImagen(),
-                _CargarImagen(),
-                _CargarImagen(),
+                SizedBox(height: 10),
+                _crearNombreMascota(),
+                _Genero(),
+                SizedBox(height: 10),
+                _Edad(),
               ]
             )
           ) 
@@ -82,14 +79,14 @@ enum SingingCharacter { macho, hembra }
     //         child: Column(
     //           mainAxisAlignment: MainAxisAlignment.end,
     //           children: <Widget>[
-    //           SizedBox(height: 40),
-    //           _Titulo(),
-    //           _CargarImagen(),
-    //           SizedBox(height: 10),
-    //           _crearNombreMascota(),
-    //           _Genero(),
-    //           SizedBox(height: 10),
-    //           _Edad(),
+              // SizedBox(height: 40),
+              // _Titulo(),
+              // _CargarImagen(),
+              // SizedBox(height: 10),
+              // _crearNombreMascota(),
+              // _Genero(),
+              // SizedBox(height: 10),
+              // _Edad(),
     //           ],
     //         ),
     //         )
