@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tindog/widgets/btn_azul.dart';
 import 'package:tindog/widgets/wave_widget.dart';
 enum SingingCharacter { macho, hembra }
  
@@ -83,6 +82,7 @@ Widget _Titulo(){
     ),
   );
 }
+
 
  Widget _CargarImagen(){
   return Column(
@@ -169,16 +169,6 @@ Widget _Titulo(){
         });
       },
     );
-  }
-
-  Widget _BtnEnviar(){
-     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30.0),
-      child: BtnAzul(texto: "botón personalizado", onPressed: () {
-      Navigator.pushNamed(context, 'registromascota');
-      }),
-     );
-
   }
 
  }
