@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tindog/widgets/wave_widget.dart';
 enum SingingCharacter { macho, hembra }
  
  class RegistroMascota extends StatefulWidget{
@@ -19,26 +20,69 @@ enum SingingCharacter { macho, hembra }
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    // para saber si el keyboard está abierto
+    final bool keyBoardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Registro  De Mascota'),
-        backgroundColor: Colors.cyan,
-      ),
-      body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: 10,vertical:20),
+      body: Stack(
         children: [
-          _CargarImagen(),
+          Container(
+            height: size.height -200,
+            color: Colors.blue
+          ),
+          AnimatedPositioned(
+            duration: Duration( milliseconds: 500 ),
+            curve: Curves.easeOutQuad,
+            top: keyBoardOpen ? -size.height / 3.7 : 0.0,
+            child: WaveWidget(
+              size: size,
+              yOffset: size.height / 5.0,
+              color: Colors.white
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20 ),
+            child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+              SizedBox(height: 40),
+              _Titulo(),
+              _CargarImagen(),
+              SizedBox(height: 10),
+              _crearNombreMascota(),
+              _Genero(),
+              SizedBox(height: 10),
+              _Edad(),
+              ],
+            ),
+            )
+          ),
+          /*_CargarImagen(),
           SizedBox(height: 10),
           _crearNombreMascota(),
           _Genero(),
           SizedBox(height: 10),
-          _Edad(),
+          _Edad(),*/
 
           
         ],
       ),
     );
   }
+
+Widget _Titulo(){
+  return Text(
+    'Registro Mascota',
+      style: TextStyle(
+         color: Colors.white,
+        fontSize: 40,
+        fontWeight: FontWeight.w900
+    ),
+  );
+
+}
 
  Widget _CargarImagen(){
   return Column(
