@@ -25,51 +25,86 @@ enum SingingCharacter { macho, hembra }
     final bool keyBoardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
     
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            height: size.height -200,
-            color: Colors.blue
-          ),
-          AnimatedPositioned(
-            duration: Duration( milliseconds: 500 ),
-            curve: Curves.easeOutQuad,
-            top: keyBoardOpen ? -size.height / 3.7 : 0.0,
-            child: WaveWidget(
-              size: size,
-              yOffset: size.height / 5.0,
-              color: Colors.white
+      
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 180.0,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Padding(
+                padding: const EdgeInsets.only(top: 100,right:30 ),
+                child: Center(child: Text('Hola mundo')),
+              ),
             ),
+            pinned: false,
+            floating: false,
           ),
-          Padding(
-            padding: const EdgeInsets.all(20 ),
-            child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-              SizedBox(height: 40),
-              _Titulo(),
-              _CargarImagen(),
-              SizedBox(height: 10),
-              _crearNombreMascota(),
-              _Genero(),
-              SizedBox(height: 10),
-              _Edad(),
-              ],
-            ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                _CargarImagen(),
+                _CargarImagen(),
+                _CargarImagen(),
+                _CargarImagen(),
+                _CargarImagen(),
+                _CargarImagen(),
+                _CargarImagen(),
+                _CargarImagen(),
+                _CargarImagen(),
+                _CargarImagen(),
+                _CargarImagen(),
+              ]
             )
-          ),
-          /*_CargarImagen(),
-          SizedBox(height: 10),
-          _crearNombreMascota(),
-          _Genero(),
-          SizedBox(height: 10),
-          _Edad(),*/
+          ) 
+        ],
+
+      )  
+    );  
+    //   body: Stack(
+    //     children: [
+    //       Container(
+    //         height: size.height -200,
+    //         color: Colors.blue
+    //       ),
+    //       AnimatedPositioned(
+    //         duration: Duration( milliseconds: 500 ),
+    //         curve: Curves.easeOutQuad,
+    //         top: keyBoardOpen ? -size.height / 3.7 : 0.0,
+    //         child: WaveWidget(
+    //           size: size,
+    //           yOffset: size.height / 5.0,
+    //           color: Colors.white
+    //         ),
+    //       ),
+    //       Padding(
+    //         padding: const EdgeInsets.all(20 ),
+    //         child: SingleChildScrollView(
+    //         child: Column(
+    //           mainAxisAlignment: MainAxisAlignment.end,
+    //           children: <Widget>[
+    //           SizedBox(height: 40),
+    //           _Titulo(),
+    //           _CargarImagen(),
+    //           SizedBox(height: 10),
+    //           _crearNombreMascota(),
+    //           _Genero(),
+    //           SizedBox(height: 10),
+    //           _Edad(),
+    //           ],
+    //         ),
+    //         )
+    //       ),
+    //       /*_CargarImagen(),
+    //       SizedBox(height: 10),
+    //       _crearNombreMascota(),
+    //       _Genero(),
+    //       SizedBox(height: 10),
+    //       _Edad(),*/
 
           
-        ],
-      ),
-    );
+    //     ],
+    //   ),
+    // );
   }
 
 Widget _Titulo(){
