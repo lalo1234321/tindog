@@ -9,6 +9,7 @@ import 'package:tindog/pages/login_page.dart';
 import 'package:tindog/pages/match_page.dart';
 import 'package:tindog/pages/profile_page.dart';
 import 'package:tindog/pages/register_page.dart';
+import 'package:tindog/pages/settings_page.dart';
 import 'package:tindog/pages/users_page.dart';
 import 'package:tindog/services/auth_service.dart';
  
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
           'profile' : (BuildContext context) => ProfilePage(),
           'chats' : (BuildContext context) => UsersPage(),
           'match' : (BuildContext context) => MatchPage(),
-          'chat' : (BuildContext context) => ChatPage()
+          'chat' : (BuildContext context) => ChatPage(),
+          'settings' : (BuildContext context)  => SettingsPage()
         },
       ),
     );
