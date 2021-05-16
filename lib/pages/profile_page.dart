@@ -5,7 +5,7 @@ import 'package:tindog/services/auth_service.dart';
 
 
 class ProfilePage extends StatelessWidget {
-  List<Pet> pets = [
+    final List<Pet> pets = [
     Pet('Osqui', 21, 'https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2016/05/19091354/Weimaraner-puppy-outdoors-with-bright-blue-eyes.20190813165758508-1.jpg'),
     Pet('Daniel', 18,'https://i.guim.co.uk/img/media/20098ae982d6b3ba4d70ede3ef9b8f79ab1205ce/0_0_969_1005/master/969.jpg?width=700&quality=85&auto=format&fit=max&s=470657ebd2a0e704df88997d393aea15'),
     Pet('Gato201', 12, 'https://www.redaccionmedica.com/images/destacados/coronavirus-gatos-perros-anticuerpos-reinfeccion-vacuna-covid--2116.jpg'),
