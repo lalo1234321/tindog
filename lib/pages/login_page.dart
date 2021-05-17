@@ -48,7 +48,8 @@ class LoginPage extends StatelessWidget {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 40,
-                    fontWeight: FontWeight.w900
+                    fontWeight: FontWeight.w900,
+                    fontStyle: FontStyle.normal
                   ),
                 )
               ],
@@ -79,6 +80,7 @@ class LoginPage extends StatelessWidget {
                   hasBorder: false,
                   onChanged: () {
                     print('email ${emailCtl.text} \npassword ${passCtl.text}');
+                    Navigator.pushReplacementNamed(context, 'profile');
                   },
                 ),
                 SizedBox(height: 20,),
