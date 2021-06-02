@@ -1,6 +1,6 @@
 # tindog
 
-A new Flutter project.
+A crossplatform mobile application to find your dog´s lover
 
 ## Getting Started
 
