@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tindog/helpers/home_view.dart';
+import 'package:tindog/services/auth_service.dart';
+import 'package:tindog/widgets/alerts.dart';
 import 'package:tindog/widgets/btn.dart';
 import 'package:tindog/widgets/custom_input.dart';
 import 'package:tindog/widgets/wave_widget.dart';
@@ -14,6 +16,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<HomeView>(context);
+    final authService = Provider.of<AuthService>(context);
     final size = MediaQuery.of(context).size;
     // para saber si el keyboard está abierto
     final bool keyBoardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
@@ -78,10 +81,23 @@ class LoginPage extends StatelessWidget {
                 Btn(
                   title: 'Iniciar sesión',
                   hasBorder: false,
-                  onChanged: () {
-                    print('email ${emailCtl.text} \npassword ${passCtl.text}');
-                    Navigator.pushReplacementNamed(context, 'profile');
-                  },
+                  onChanged:  authService.autenticando ? null :
+                    () async{
+                      print('email ${emailCtl.text}\npassword ${passCtl.text}' );
+                      final loginOk = await authService.login(emailCtl.text, passCtl.text);
+                      if( loginOk ) {
+                        //TODO mostrar alertas en caso de que falle el login
+                        Navigator.pushReplacementNamed(context, 'profile');
+                      } else {
+                        _showAlertDialog(context,'Error', 'Credenciales no coinciden');
+                      }
+                      
+                    },
+                  // onChanged: () {
+                    
+                  //   print('email ${emailCtl.text} \npassword ${passCtl.text}');
+                  //   Navigator.pushReplacementNamed(context, 'profile');
+                  // },
                 ),
                 SizedBox(height: 20,),
                 Btn(
@@ -99,6 +115,25 @@ class LoginPage extends StatelessWidget {
         
       )
 
+    );
+  }
+
+  void _showAlertDialog( BuildContext context, String title, String subtitle ) {
+    showDialog(
+      context: context,
+      builder: (buildcontext) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(subtitle),
+          actions: <Widget>[
+            TextButton(
+            child: Text("Aceptar"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
+          ],
+        );
+      }
     );
   }
 }

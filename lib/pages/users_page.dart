@@ -15,6 +15,14 @@ class _UsersPageState extends State<UsersPage> {
     Usuario(uid: '1',nombre: 'Lalo', email: 'test1@test', online: true),
     Usuario(uid: '2',nombre: 'Edgar', email: 'test2@test', online: true),
     Usuario(uid: '3',nombre: 'Luis', email: 'test3@test', online: true),
+    Usuario(uid: '4',nombre: 'Alberto', email: 'test4@test', online: false),
+    Usuario(uid: '1',nombre: 'Lalo', email: 'test1@test', online: true),
+    Usuario(uid: '2',nombre: 'Edgar', email: 'test2@test', online: true),
+    Usuario(uid: '3',nombre: 'Luis', email: 'test3@test', online: true),
+    Usuario(uid: '4',nombre: 'Alberto', email: 'test4@test', online: false),
+    Usuario(uid: '1',nombre: 'Lalo', email: 'test1@test', online: true),
+    Usuario(uid: '2',nombre: 'Edgar', email: 'test2@test', online: true),
+    Usuario(uid: '3',nombre: 'Luis', email: 'test3@test', online: true),
     Usuario(uid: '4',nombre: 'Alberto', email: 'test4@test', online: false)
   ];
 
