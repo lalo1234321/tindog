@@ -13,6 +13,7 @@ class ProfilePage extends StatelessWidget {
   ]; 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -20,7 +21,7 @@ class ProfilePage extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 74,top:200),
             child: Text(
-              'Elije un perfil',
+              'Elije un perfil ${authService.user.firstName}',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 40,
