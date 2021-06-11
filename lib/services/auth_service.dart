@@ -29,7 +29,7 @@ class AuthService with ChangeNotifier {
   }
 
 
-  Future<bool> login( String email, String password ) async{
+  Future login( String email, String password ) async{
     this.autenticando = true;
     final data = {
       'email': email,
@@ -49,7 +49,8 @@ class AuthService with ChangeNotifier {
       this._saveToken(loginResponse.token);
       return true;
     } else {
-      return false;
+      final respBody = jsonDecode(response.body);
+      return respBody['message'];
     }
 
   }

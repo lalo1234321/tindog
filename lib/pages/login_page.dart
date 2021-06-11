@@ -85,11 +85,11 @@ class LoginPage extends StatelessWidget {
                     () async{
                       print('email ${emailCtl.text}\npassword ${passCtl.text}' );
                       final loginOk = await authService.login(emailCtl.text, passCtl.text);
-                      if( loginOk ) {
+                      if( loginOk == true ) {
                         //TODO mostrar alertas en caso de que falle el login
                         Navigator.pushReplacementNamed(context, 'profile');
                       } else {
-                        _showAlertDialog(context,'Error', 'Credenciales no coinciden');
+                        _showAlertDialog(context,'Error', loginOk.toString());
                       }
                       
                     },
