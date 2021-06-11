@@ -4,6 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:tindog/helpers/env.dart';
 import 'package:tindog/models/login_response.dart';
 
 class AuthService with ChangeNotifier {
@@ -36,7 +37,7 @@ class AuthService with ChangeNotifier {
       'password': password
     };
 
-    final response = await http.post('http://192.168.100.6:8080/login',
+    final response = await http.post('http://${Env.ip}:${Env.port}/login',
     body: jsonEncode(data),
     headers: {
         'Content-Type': 'application/json'
@@ -60,7 +61,7 @@ class AuthService with ChangeNotifier {
   Future<bool> isLoogedIn() async{
     final token = await this._storage.read(key: 'token');
     print(token); 
-    final resp = await http.post('http://192.168.100.6:8080/login/renew', 
+    final resp = await http.post('http://${Env.ip}:${Env.port}/login/renew', 
       headers: {
         'Content-Type': 'application/json',
         'token': token
