@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tindog/helpers/home_view.dart';
 import 'package:tindog/pages/chat_page.dart';
+import 'package:tindog/pages/loading_page.dart';
 import 'package:tindog/pages/login_page.dart';
 import 'package:tindog/pages/match_page.dart';
 import 'package:tindog/pages/profile_page.dart';
@@ -27,10 +28,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Material App',
-        initialRoute: 'login',
+        initialRoute: 'loading',
         routes: {
           
           'login': ( BuildContext context ) => LoginPage(),
+          'loading': ( BuildContext context ) => LoadingPage(),
           'register' : (BuildContext context) => RegisterPage(),
           'profile' : (BuildContext context) => ProfilePage(),
           'chats' : (BuildContext context) => UsersPage(),

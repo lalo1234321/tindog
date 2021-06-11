@@ -35,6 +35,7 @@ class User {
         this.isOnline,
         this.emailConfirmed,
         this.premium,
+        this.datePlan,
         this.ownedPets,
         this.id,
         this.firstName,
@@ -55,6 +56,7 @@ class User {
     bool isOnline;
     bool emailConfirmed;
     bool premium;
+    List<DateTime> datePlan;
     List<String> ownedPets;
     String id;
     String firstName;
@@ -75,6 +77,7 @@ class User {
         isOnline: json["isOnline"],
         emailConfirmed: json["emailConfirmed"],
         premium: json["premium"],
+        datePlan: List<DateTime>.from(json["datePlan"].map((x) => DateTime.parse(x))),
         ownedPets: List<String>.from(json["ownedPets"].map((x) => x)),
         id: json["_id"],
         firstName: json["firstName"],
@@ -96,6 +99,7 @@ class User {
         "isOnline": isOnline,
         "emailConfirmed": emailConfirmed,
         "premium": premium,
+        "datePlan": List<dynamic>.from(datePlan.map((x) => x.toIso8601String())),
         "ownedPets": List<dynamic>.from(ownedPets.map((x) => x)),
         "_id": id,
         "firstName": firstName,

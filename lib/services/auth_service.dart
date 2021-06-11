@@ -54,6 +54,35 @@ class AuthService with ChangeNotifier {
     }
 
   }
+
+  Future<bool> isLoogedIn() async{
+    final token = await this._storage.read(key: 'token');
+    print(token); 
+    final resp = await http.post('http://192.168.100.6:8080/login/renew', 
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token
+      }
+    );
+    print(resp.body);
+    if(resp.statusCode == 200 ) {
+      final loginResponse = loginResponseFromJson(resp.body);
+      //  le damos más tiempo de vida al token
+      this._saveToken(loginResponse.token);
+      // TODO guardar token 
+      
+
+      return true;
+    } else {
+      this.logout();
+      return false;
+      
+    }
+
+
+  }
+
+
   Future _saveToken( String token ) async{
     return await _storage.write(key: 'token', value: token);
   }

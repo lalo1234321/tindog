@@ -48,11 +48,12 @@ class SettingsPage extends StatelessWidget {
                     leading: Icon(Icons.exit_to_app, color: Colors.blue,),
                     title: Text('Cerrar sesión'),
                     trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
-                    onTap: () {
+                    onTap: () async{
                       //TODO desconectar de nuestro socket server
                       // como yo no quiero instanciar todo el authservice podemos entrar a los métodos estáticos
                       // por eso es imporetante trabajar con métodos estáticos según nos convenga
                       // socketService.disconnect();
+                      await authService.logout();
                       Navigator.pushReplacementNamed(context, 'login');
                       // AuthService.deleteToken();
                       //  en este punto ya se borró el token y cuand0 reiniciemos la app la loading page nos
