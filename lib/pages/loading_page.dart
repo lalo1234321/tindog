@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tindog/services/auth_service.dart';
+import 'package:tindog/widgets/fli%E1%B9%95_loader.dart';
 
 
-class LoadingPage extends StatelessWidget {
+class LoadingPage extends StatefulWidget {
+  @override
+  _LoadingPageState createState() => _LoadingPageState();
+}
+
+class _LoadingPageState extends State<LoadingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,12 +17,17 @@ class LoadingPage extends StatelessWidget {
         future: checkLoginState(context),
         builder: ( BuildContext context, AsyncSnapshot<dynamic> snapshot ) {
           return Center(
-            child: Text('Espere un momento'),
+            child: FlipLoader(
+              loaderBackground: Colors.blue,
+              iconColor: Colors.white,
+              icon: Icons.email,
+              animationType: "full_flip"),
           );
         } ,
       )
     );
   }
+
   Future checkLoginState( BuildContext context ) async{
     final authService = Provider.of<AuthService>(context, listen: false);
 
