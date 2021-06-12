@@ -36,10 +36,15 @@ class SettingsPage extends StatelessWidget {
                     title: Text('Cambiar password'),
                     trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.money, color: Colors.blue,),
-                    title: Text('Cambiar a premium'),
-                    trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'payment');
+                    },
+                    child: ListTile(
+                      leading: Icon(Icons.money, color: Colors.blue,),
+                      title: Text('Cambiar a premium'),
+                      trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                    ),
                   ),
                   (premium) ? ListTile(
                     leading: Icon(Icons.pets, color: Colors.blue,),
