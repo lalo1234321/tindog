@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tindog/services/auth_service.dart';
+import 'package:tindog/services/user_service.dart';
 
 
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    bool premium = authService.user.premium;
     final petName = authService.petName;
     return Scaffold(
       
@@ -39,11 +41,20 @@ class SettingsPage extends StatelessWidget {
                     title: Text('Cambiar a premium'),
                     trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
                   ),
-                  ListTile(
+                  (premium) ? ListTile(
                     leading: Icon(Icons.pets, color: Colors.blue,),
                     title: Text('Registrar una mascota'),
                     trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
-                  ),
+                  ) : Container(
+                    color: Colors.blue[300],
+                    child: ListTile(
+                      
+                      leading: Icon(Icons.pets, color: Colors.white,),
+                      title: Text('Registrar una mascota'),
+                      trailing: Icon(Icons.keyboard_arrow_right, color: Colors.white,),
+                    ),
+                  )
+                  ,
                   ListTile(
                     leading: Icon(Icons.exit_to_app, color: Colors.blue,),
                     title: Text('Cerrar sesión'),

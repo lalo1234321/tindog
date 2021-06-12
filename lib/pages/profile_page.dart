@@ -75,6 +75,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _listViewPets( ) {
     final userService = Provider.of<UserService>(context);
+    final authService = Provider.of<AuthService>(context);
 
     
     return FutureBuilder(
@@ -85,7 +86,34 @@ class _ProfilePageState extends State<ProfilePage> {
           List<OwnedPet> ownedPets = snapshot.data;
           // String result = snapshot.data[0].profileImageUri.replaceAll("localhost", "192.168.100.6");
           
-        return ListView.builder(
+        return (ownedPets.length == 0) ? Padding(
+            padding: EdgeInsets.only(right: 20, left: 20,top: 370),
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: () async{
+                    await authService.savePetName('Invitado');
+                    Navigator.pushNamed(context, 'match');
+                  },
+                  child: CircleAvatar(
+                    radius: 65,
+                    backgroundImage: NetworkImage('https://image.shutterstock.com/image-vector/avatar-man-icon-profile-placeholder-260nw-1229859850.jpg'),
+                    
+                  ),
+                ),
+                SizedBox(height: 10,),
+                Text(
+                  'Invitado',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20 
+                  ),
+                )
+              ],
+            ),
+          ) :
+        
+        ListView.builder(
         itemCount: ownedPets.length,
         itemBuilder: (BuildContext context, int i) {
           String result = ownedPets[i].profileImageUri.replaceAll("localhost", Env.ip);
