@@ -38,7 +38,7 @@ class SettingsPage extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, 'payment');
+                      Navigator.pushNamed(context, 'premium');
                     },
                     child: ListTile(
                       leading: Icon(Icons.money, color: Colors.blue,),

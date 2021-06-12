@@ -8,11 +8,15 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
+
 final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 String cardNumber = "", expiryDate = "", cardHolderName = "", cvvCode = "";
 bool isCvvFocused = false;
   @override
   Widget build(BuildContext context) {
+    final arguments = ModalRoute.of(context).settings.arguments as Map;
+    
+    if (arguments != null) print(arguments['plan']);  
     return Scaffold(
       body: Column(
 
@@ -21,7 +25,7 @@ bool isCvvFocused = false;
         creditCard(),
         _form(),
         SizedBox(height: 0,),
-        confirmButton()
+        confirmButton( arguments )
       ] 
       
       )
@@ -30,12 +34,13 @@ bool isCvvFocused = false;
   }
 
 
-  Widget confirmButton() {
+  Widget confirmButton(Map arguments) {
     return ElevatedButton(
       onPressed: () {
         print('Realizando compra');
       },
-      child: Text('Confirmar compra'),
+      child: (arguments['plan'] == 1) ? Text('Confirmar compra mensual') :
+        Text('Confirmar compra anual'),
       
     );
   }
