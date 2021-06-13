@@ -4,11 +4,16 @@ import 'package:tindog/services/auth_service.dart';
 import 'package:tindog/services/user_service.dart';
 
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
-    bool premium = authService.user.premium;
+    final authService = Provider.of<AuthService>(context, listen:  true);
+    bool premium = AuthService.user.premium;
     final petName = authService.petName;
     return Scaffold(
       

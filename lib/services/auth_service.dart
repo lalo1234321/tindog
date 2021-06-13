@@ -11,7 +11,7 @@ class AuthService with ChangeNotifier {
   final _storage = new FlutterSecureStorage();
   bool _autenticando = false;
   String petName; 
-  User user;
+  static User user;
   bool get autenticando => this._autenticando;
   set autenticando( bool valor ) {
     this._autenticando = valor;
@@ -47,7 +47,7 @@ class AuthService with ChangeNotifier {
     this.autenticando = false;
     if( response.statusCode == 200 ) {
       final loginResponse = loginResponseFromJson(response.body);
-      this.user = loginResponse.user;
+      AuthService.user = loginResponse.user;
 
       this._saveToken(loginResponse.token);
       return true;
@@ -71,7 +71,7 @@ class AuthService with ChangeNotifier {
     if(resp.statusCode == 200 ) {
       final loginResponse = loginResponseFromJson(resp.body);
       //  le damos más tiempo de vida al token
-      this.user = loginResponse.user;
+      AuthService.user = loginResponse.user;
       this._saveToken(loginResponse.token);
       // TODO guardar token 
       

@@ -32,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Padding(
             padding: EdgeInsets.only(left: 74,top:200),
             child: Text(
-              'Elije un perfil ${authService.user.firstName}',
+              'Elije un perfil ${AuthService.user.firstName}',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 40,

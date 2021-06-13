@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
+import 'package:provider/provider.dart';
+import 'package:tindog/services/auth_service.dart';
+import 'package:tindog/services/user_service.dart';
 
 
 class PaymentPage extends StatefulWidget {
@@ -14,6 +17,8 @@ String cardNumber = "", expiryDate = "", cardHolderName = "", cvvCode = "";
 bool isCvvFocused = false;
   @override
   Widget build(BuildContext context) {
+    final userService = Provider.of<UserService>(context);
+
     final arguments = ModalRoute.of(context).settings.arguments as Map;
     
     if (arguments != null) print(arguments['plan']);  
@@ -25,7 +30,7 @@ bool isCvvFocused = false;
         creditCard(),
         _form(),
         SizedBox(height: 0,),
-        confirmButton( arguments )
+        confirmButton( userService, arguments )
       ] 
       
       )
@@ -34,9 +39,16 @@ bool isCvvFocused = false;
   }
 
 
-  Widget confirmButton(Map arguments) {
+  Widget confirmButton(UserService userService, Map arguments) {
+    
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async{
+        if( cardNumber == "" || expiryDate == ""|| cardHolderName == "" || cvvCode == "" ) {
+          _showAlertDialog(context, "Error", "No llenó los campos correctamente");
+        } else {
+          await userService.upgradeAccount(arguments['plan']);
+          _showAlertDialog(context, "Gracias por su compra", "La compra se ha realizado con éxito");
+        }
         print('Realizando compra');
       },
       child: (arguments['plan'] == 1) ? Text('Confirmar compra mensual') :
@@ -81,6 +93,7 @@ bool isCvvFocused = false;
           hintText: 'XXX',
         ),
         cardHolderDecoration: const InputDecoration(
+          
           border: OutlineInputBorder(),
           labelText: 'Card Holder Name',
         ),
@@ -97,4 +110,23 @@ bool isCvvFocused = false;
       isCvvFocused = creditCardModel.isCvvFocused;
     });
 }
+
+  void _showAlertDialog( BuildContext context, String title, String subtitle ) {
+    showDialog(
+      context: context,
+      builder: (buildcontext) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(subtitle),
+          actions: <Widget>[
+            TextButton(
+            child: Text("Aceptar"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            }),
+          ],
+        );
+      }
+    );
+  }
 }
