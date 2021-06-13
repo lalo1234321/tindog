@@ -27,7 +27,12 @@ class _HomeBodyState extends State<HomeBody> {
       future: userService.preMatch(),
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         if(snapshot.hasData) {
-          return CardSwiper(
+          
+          return (snapshot.data.length == 0) ?  
+          Center(
+            child: Text('No se han registrado mascotas con esas características'),
+          )
+          : CardSwiper(
             results: snapshot.data,
           );
         } else {

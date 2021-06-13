@@ -66,7 +66,7 @@ class Match {
     String medicalCertificateImagePhysicalPath;
     String profileImageUri;
     String medicalCertificateImageUri;
-    String owner;
+    Owner owner;
     DateTime createdAt;
     DateTime updatedAt;
     int v;
@@ -85,7 +85,7 @@ class Match {
         medicalCertificateImagePhysicalPath: json["medicalCertificateImagePhysicalPath"],
         profileImageUri: json["profileImageURI"],
         medicalCertificateImageUri: json["medicalCertificateImageURI"],
-        owner: json["owner"],
+        owner: Owner.fromJson(json["owner"]),
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
@@ -105,7 +105,95 @@ class Match {
         "medicalCertificateImagePhysicalPath": medicalCertificateImagePhysicalPath,
         "profileImageURI": profileImageUri,
         "medicalCertificateImageURI": medicalCertificateImageUri,
-        "owner": owner,
+        "owner": owner.toJson(),
+        "createdAt": createdAt.toIso8601String(),
+        "updatedAt": updatedAt.toIso8601String(),
+        "__v": v,
+    };
+}
+
+class Owner {
+    Owner({
+        this.typeAccount,
+        this.isDeleted,
+        this.isOnline,
+        this.emailConfirmed,
+        this.premium,
+        this.datePlan,
+        this.ownedPets,
+        this.id,
+        this.firstName,
+        this.lastName,
+        this.userName,
+        this.email,
+        this.password,
+        this.age,
+        this.state,
+        this.town,
+        this.createdAt,
+        this.updatedAt,
+        this.v,
+    });
+
+    String typeAccount;
+    bool isDeleted;
+    bool isOnline;
+    bool emailConfirmed;
+    bool premium;
+    List<DateTime> datePlan;
+    List<String> ownedPets;
+    String id;
+    String firstName;
+    String lastName;
+    String userName;
+    String email;
+    String password;
+    int age;
+    String state;
+    String town;
+    DateTime createdAt;
+    DateTime updatedAt;
+    int v;
+
+    factory Owner.fromJson(Map<String, dynamic> json) => Owner(
+        typeAccount: json["typeAccount"],
+        isDeleted: json["isDeleted"],
+        isOnline: json["isOnline"],
+        emailConfirmed: json["emailConfirmed"],
+        premium: json["premium"],
+        datePlan: List<DateTime>.from(json["datePlan"].map((x) => DateTime.parse(x))),
+        ownedPets: List<String>.from(json["ownedPets"].map((x) => x)),
+        id: json["_id"],
+        firstName: json["firstName"],
+        lastName: json["lastName"],
+        userName: json["userName"],
+        email: json["email"],
+        password: json["password"],
+        age: json["age"],
+        state: json["state"],
+        town: json["town"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        updatedAt: DateTime.parse(json["updatedAt"]),
+        v: json["__v"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "typeAccount": typeAccount,
+        "isDeleted": isDeleted,
+        "isOnline": isOnline,
+        "emailConfirmed": emailConfirmed,
+        "premium": premium,
+        "datePlan": List<dynamic>.from(datePlan.map((x) => x.toIso8601String())),
+        "ownedPets": List<dynamic>.from(ownedPets.map((x) => x)),
+        "_id": id,
+        "firstName": firstName,
+        "lastName": lastName,
+        "userName": userName,
+        "email": email,
+        "password": password,
+        "age": age,
+        "state": state,
+        "town": town,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,

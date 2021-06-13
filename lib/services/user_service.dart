@@ -56,9 +56,10 @@ class UserService with ChangeNotifier{
 
 
   Future<List<Match>> preMatch() async{
-    String id = "60c5292f0d544c671b05cdc2";
+    
     try{
       final token = await AuthService.getToken();
+      final id = await AuthService.getPetId();
       final response = await http.get('http://${Env.ip}:${Env.port}/pet/match/$id',
 
       headers: {

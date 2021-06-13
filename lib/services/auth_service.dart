@@ -103,4 +103,14 @@ class AuthService with ChangeNotifier {
     await _storage.write(key: 'petName', value: name);
     this.petName = name;
   }
+
+  Future savePetId(String petId) async{
+    await _storage.write(key: 'petId', value: petId);
+    //this.idPet = idPet;
+  }
+  static Future<String> getPetId() async{
+    final _storage = new FlutterSecureStorage();
+    final petId = await _storage.read(key: 'petId');
+    return petId;
+  }
 }

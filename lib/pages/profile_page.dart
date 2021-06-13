@@ -125,6 +125,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 GestureDetector(
                   onTap: () async{
                     await authService.savePetName(ownedPets[i].name);
+                    await authService.savePetId(ownedPets[i].id);
                     Navigator.pushNamed(context, 'match');
                   },
                   child: CircleAvatar(
