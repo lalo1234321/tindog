@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tindog/services/auth_service.dart';
+import 'package:tindog/services/socket_service.dart';
 import 'package:tindog/widgets/fli%E1%B9%95_loader.dart';
 
 
@@ -30,10 +31,11 @@ class _LoadingPageState extends State<LoadingPage> {
 
   Future checkLoginState( BuildContext context ) async{
     final authService = Provider.of<AuthService>(context, listen: false);
-
+    //final socketService = Provider.of<SocketService>(context, listen: false);
     final auth = await authService.isLoogedIn();
 
     if( auth ) {
+      //socketService.connect();
       Navigator.pushReplacementNamed(context, 'profile');
     } else {
       Navigator.pushReplacementNamed(context, 'login');

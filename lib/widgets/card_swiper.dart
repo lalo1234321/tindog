@@ -27,6 +27,7 @@ class CardSwiper extends StatelessWidget {
           itemWidth: _screenSize.width * 0.7,
           itemHeight:_screenSize.height * 0.5,
           itemBuilder: (BuildContext context,int index){
+            String petId = results[index].id;
             String result = results[index].profileImageUri.replaceAll("localhost", Env.ip);
             results[index].id = '${results[index].id}-tarjet';
             return Hero(
@@ -42,7 +43,8 @@ class CardSwiper extends StatelessWidget {
                         'certificate': results[index].medicalCertificateImageUri,
                         'town': results[index].owner.town,
                         'state': results[index].owner.state,
-                        'owner': results[index].owner.userName
+                        'owner': results[index].owner.userName,
+                        'petId': petId.split("-")
                       });
                     },
                     child: FadeInImage(               

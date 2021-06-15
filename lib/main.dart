@@ -16,6 +16,7 @@ import 'package:tindog/pages/register_page.dart';
 import 'package:tindog/pages/settings_page.dart';
 import 'package:tindog/pages/users_page.dart';
 import 'package:tindog/services/auth_service.dart';
+import 'package:tindog/services/socket_service.dart';
 import 'package:tindog/services/user_service.dart';
  
 void main() => runApp(MyApp());
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider( create: (BuildContext context ) => HomeView()),
         ChangeNotifierProvider(create: ( BuildContext context ) => AuthService()),
-        ChangeNotifierProvider(create: ( BuildContext context ) => UserService() )
+        ChangeNotifierProvider(create: ( BuildContext context ) => UserService() ),
+        ChangeNotifierProvider(create: ( BuildContext context ) => SocketService() )
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

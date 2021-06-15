@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tindog/services/auth_service.dart';
+import 'package:tindog/services/socket_service.dart';
 import 'package:tindog/services/user_service.dart';
 
 
@@ -13,6 +14,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context, listen:  true);
+    final socketService = Provider.of<SocketService>(context, listen: false);
     bool premium = AuthService.user.premium;
     final petName = authService.petName;
     return Scaffold(
@@ -75,6 +77,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       // por eso es imporetante trabajar con métodos estáticos según nos convenga
                       // socketService.disconnect();
                       await authService.logout();
+                      await socketService.disconnect();
                       Navigator.pushReplacementNamed(context, 'login');
                       // AuthService.deleteToken();
                       //  en este punto ya se borró el token y cuand0 reiniciemos la app la loading page nos

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tindog/helpers/home_view.dart';
 import 'package:tindog/services/auth_service.dart';
+import 'package:tindog/services/socket_service.dart';
 import 'package:tindog/widgets/alerts.dart';
 import 'package:tindog/widgets/btn.dart';
 import 'package:tindog/widgets/custom_input.dart';
@@ -17,6 +18,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = Provider.of<HomeView>(context);
     final authService = Provider.of<AuthService>(context);
+    // final socketServide = Provider.of<SocketService>(context);
     final size = MediaQuery.of(context).size;
     // para saber si el keyboard está abierto
     final bool keyBoardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
@@ -87,6 +89,7 @@ class LoginPage extends StatelessWidget {
                       final loginOk = await authService.login(emailCtl.text, passCtl.text);
                       if( loginOk == true ) {
                         //TODO mostrar alertas en caso de que falle el login
+                        //socketServide.connect();
                         Navigator.pushReplacementNamed(context, 'profile');
                       } else {
                         _showAlertDialog(context,'Error', loginOk.toString());

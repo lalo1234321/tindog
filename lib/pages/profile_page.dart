@@ -4,6 +4,7 @@ import 'package:tindog/helpers/env.dart';
 import 'package:tindog/models/owned_pets_response.dart';
 import 'package:tindog/models/pet.dart';
 import 'package:tindog/services/auth_service.dart';
+import 'package:tindog/services/socket_service.dart';
 import 'package:tindog/services/user_service.dart';
 
 
@@ -25,6 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    // final socketService = Provider.of<SocketService>(context, listen: false);
     return Scaffold(
       body: Stack(
         children: <Widget>[
@@ -76,12 +78,12 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _listViewPets( ) {
     final userService = Provider.of<UserService>(context);
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context, listen: false);
 
     
     return FutureBuilder(
       future: userService.ownedPets(),
       builder: ( BuildContext context, AsyncSnapshot<dynamic> snapshot ) {
-        
         if(snapshot.hasData) {
           List<OwnedPet> ownedPets = snapshot.data;
           // String result = snapshot.data[0].profileImageUri.replaceAll("localhost", "192.168.100.6");
@@ -126,6 +128,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   onTap: () async{
                     await authService.savePetName(ownedPets[i].name);
                     await authService.savePetId(ownedPets[i].id);
+                    await authService.savePetUserName(ownedPets[i].username);
+                    socketService.connect();
                     Navigator.pushNamed(context, 'match');
                   },
                   child: CircleAvatar(

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:tindog/models/notification.dart';
+import 'package:tindog/services/socket_service.dart';
+import 'package:tindog/widgets/notification.dart';
 
 
 
@@ -9,7 +13,47 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  RefreshController _refreshController = RefreshController(initialRefresh: false);
+  // RefreshController _refreshController = RefreshController(initialRefresh: false);
+  SocketService socketService;
+  List<Widget> notifications = [
+    // new Notify(from: 'lalo')
+  ];
+  //List<Widget> _results = <Widget>[];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    this.socketService = Provider.of<SocketService>(context, listen: false);
+    this.socketService.socket.on('notify', listenNotifications);
+    
+  }
+
+  void setStateIfMounted(f) {
+    if (mounted) setState(f);
+  }
+  void listenNotifications(dynamic payload) {
+    print('have a message $payload');
+    // Card notification = _myCard(payload['from'], payload['to']);
+    print('dentro del notify');
+    // notifications.insert(0, notification);
+    if(mounted){
+    setState(() {
+      notifications = [...notifications,new Notify(from: payload['from'])];
+
+      print(notifications);
+      
+    });
+    }
+    // if(mounted) {
+    //   print('dentro del mounted');
+    //   setState(() {
+    //   print(notifications);
+    //   notifications.insert(0, notification);
+    // });
+    // }
+    
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,38 +68,29 @@ class _NotificationsPageState extends State<NotificationsPage> {
         ),
       ),
       // body: _listViewUsuarios()
-      body: SmartRefresher(
-        controller: _refreshController,
-        enablePullDown: true,
-        header: WaterDropHeader(
-          complete: Icon(Icons.check, color: Colors.blue[400],),
-          waterDropColor: Colors.blue[400],
+      body: 
+        ListView(
+          children: notifications,
         ),
-        onRefresh: () {
-          print('updating notifications');
-          // _cargarUsuarios();
-        },
-        child: ListView(
-          children: [
-            _myCard('lalo'),
-            _myCard('lalo'),
-            _myCard('lalo'),
-            _myCard('lalo'),
-            _myCard('lalo'),
-            _myCard('lalo'),
-            _myCard('lalo'),
-            _myCard('lalo'),
-            _myCard('lalo'),
-            _myCard('lalo'),
-            _myCard('lalo'),
-          ],
-        )
-      ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // listenNotifications({
+            //   'for': 'lalo',
+            //   'to': 'tania'
+            // });
+            //notifications.add(new Notify(from: 'tania'));
+            print(notifications);
+            setState(() {
+              notifications = [...notifications,new Notify(from: 'tania')];
+            });
+          },
+        ),
+      
     );
   }
 
   
-  Card _myCard(String from) {
+  Card _myCard(String from, String to) {
   return Card(
     
     // Con esta propiedad modificamos la forma de nuestro card
@@ -96,4 +131,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
     ),
   );
 }
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
 }

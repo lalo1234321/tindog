@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tindog/helpers/env.dart';
+import 'package:tindog/services/auth_service.dart';
+import 'package:tindog/services/notification_service.dart';
+import 'package:tindog/services/socket_service.dart';
 
 
 class PetDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final socketService = Provider.of<SocketService>(context, listen: false);
     final arguments = ModalRoute.of(context).settings.arguments as Map;
     String result = arguments['imageprofile'].replaceAll("localhost", Env.ip);
     String result1 = arguments['certificate'].replaceAll("localhost", Env.ip);
@@ -110,7 +115,7 @@ class PetDetailPage extends StatelessWidget {
                             Text("Emparejamientos",
                               style: TextStyle(
                                   color: Colors.blueAccent,
-                                  fontSize: 22.0,
+                                  fontSize: 18.0,
                                   fontWeight: FontWeight.w600
                               ),),
                             SizedBox(
@@ -158,8 +163,15 @@ class PetDetailPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   RaisedButton(
-                    onPressed: (){
+                    onPressed: () async{
                       print('Solicitando emparejamiento');
+                      String petName = await AuthService.getPetName();
+                      print(arguments['petId']);
+                      socketService.emit('notify',{
+                        'from': petName,
+                        'to': arguments['username']
+                      });
+                      // notificationService.petTo.id = arguments['id'];
                     },
                     shape:  RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(80.0),

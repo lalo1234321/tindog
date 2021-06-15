@@ -6,12 +6,15 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:tindog/helpers/env.dart';
 import 'package:tindog/models/login_response.dart';
+import 'package:tindog/models/owned_pets_response.dart';
 
 class AuthService with ChangeNotifier {
   final _storage = new FlutterSecureStorage();
   bool _autenticando = false;
   String petName; 
+  // static OwnedPet pet;
   static User user;
+   
   bool get autenticando => this._autenticando;
   set autenticando( bool valor ) {
     this._autenticando = valor;
@@ -112,5 +115,14 @@ class AuthService with ChangeNotifier {
     final _storage = new FlutterSecureStorage();
     final petId = await _storage.read(key: 'petId');
     return petId;
+  }
+  Future savePetUserName(String petUserName) async{
+    await _storage.write(key: 'petUserName', value: petUserName);
+    //this.idPet = idPet;
+  }
+  static Future<String> getPetUserName() async{
+    final _storage = new FlutterSecureStorage();
+    final petUserName = await _storage.read(key: 'petUserName');
+    return petUserName;
   }
 }
