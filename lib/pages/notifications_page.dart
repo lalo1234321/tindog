@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:tindog/models/notification.dart';
 import 'package:tindog/services/socket_service.dart';
+import 'package:tindog/services/user_service.dart';
 import 'package:tindog/widgets/notification.dart';
 
 
@@ -15,6 +16,7 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState extends State<NotificationsPage> {
   // RefreshController _refreshController = RefreshController(initialRefresh: false);
   SocketService socketService;
+  UserService userService;
   List<Widget> notifications = [
     // new Notify(from: 'lalo')
   ];
@@ -23,6 +25,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    this.userService = Provider.of<UserService>(context, listen: false);
     this.socketService = Provider.of<SocketService>(context, listen: false);
     this.socketService.socket.on('notify', listenNotifications);
     
@@ -69,28 +72,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
       ),
       // body: _listViewUsuarios()
       body: 
-        ListView(
-          children: notifications,
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // listenNotifications({
-            //   'for': 'lalo',
-            //   'to': 'tania'
-            // });
-            //notifications.add(new Notify(from: 'tania'));
-            print(notifications);
-            setState(() {
-              notifications = [...notifications,new Notify(from: 'tania')];
-            });
-          },
-        ),
+        _notificationFuture(userService)
       
     );
   }
 
   
-  Card _myCard(String from, String to) {
+  Card _myCard(String from, String to, String id) {
   return Card(
     
     // Con esta propiedad modificamos la forma de nuestro card
@@ -123,14 +111,60 @@ class _NotificationsPageState extends State<NotificationsPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            TextButton(onPressed: () => {}, child: Icon(Icons.mark_chat_read)),
-            TextButton(onPressed: () => {}, child: Icon(Icons.not_interested, color: Colors.red,))
+            TextButton(onPressed: ()  {
+              //TODO endpoint para modificar el estado de la notificación a true 
+              //crear un chat entre las dos mascotas con los datos de la notificación
+              // eliminar notificación
+              
+              print('aceptando invitación');
+            }, child: Icon(Icons.mark_chat_read)),
+            TextButton(onPressed: ()  async{
+              //print('cancelando')
+              await userService.deleteNotification(id);
+              setState(() {
+                
+              });
+            }, child: Icon(Icons.not_interested, color: Colors.red,))
           ],
         )
       ],
     ),
   );
 }
+
+  Widget _listNotifications (List results) {
+    
+    return ListView.builder(
+      itemCount: results.length,
+      itemBuilder: (BuildContext context, index) {
+        return _myCard(results[index].from, results[index].to, results[index].id);
+      },
+    );
+  }
+  Widget _notificationFuture (UserService userService) {
+    return FutureBuilder(
+      future: userService.retrieveNotifications(),
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+        if(snapshot.hasData) {
+          
+          return (snapshot.data.length == 0) ?  
+          Center(
+            child: Text('No hay notificaciones disponibles'),
+          )
+          : _listNotifications(
+            snapshot.data,
+          );
+        } else {
+          return Container(
+            height: 400,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
+    );
+  }
   @override
   void dispose() {
     // TODO: implement dispose

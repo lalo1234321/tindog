@@ -140,7 +140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 SizedBox(height: 10,),
                 Text(
-                  ownedPets[i].name,
+                  ownedPets[i].username,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20 

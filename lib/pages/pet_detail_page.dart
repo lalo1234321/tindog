@@ -165,10 +165,10 @@ class PetDetailPage extends StatelessWidget {
                   RaisedButton(
                     onPressed: () async{
                       print('Solicitando emparejamiento');
-                      String petName = await AuthService.getPetName();
+                      String petUserName = await AuthService.getPetUserName();
                       print(arguments['petId']);
                       socketService.emit('notify',{
-                        'from': petName,
+                        'from': petUserName,
                         'to': arguments['username']
                       });
                       // notificationService.petTo.id = arguments['id'];
