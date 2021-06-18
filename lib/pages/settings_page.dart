@@ -40,7 +40,17 @@ class _SettingsPageState extends State<SettingsPage> {
                 children: <Widget>[
                   ListTile(
                     leading: Icon(Icons.lock_outline, color: Colors.blue,),
-                    title: Text('Cambiar password'),
+                    title: Text('Cambiar contraseña'),
+                    trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.house, color: Colors.blue,),
+                    title: Text('Cambiar estado'),
+                    trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.house_outlined, color: Colors.blue,),
+                    title: Text('Cambiar municipio'),
                     trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
                   ),
                   GestureDetector(
