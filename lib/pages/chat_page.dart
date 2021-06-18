@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tindog/models/retrieve_message_response.dart';
+import 'package:tindog/services/auth_service.dart';
+import 'package:tindog/services/socket_service.dart';
+import 'package:tindog/services/user_service.dart';
 import 'package:tindog/widgets/chat_message.dart';
 
 
@@ -8,13 +13,61 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
+  SocketService socketService;
+  AuthService authService;
+  UserService userService;
   final _textController = TextEditingController();
   final _focusNode = FocusNode();
   bool _estaEscribiendo = false;
   List<ChatMessage> _messages = [];
+  String petUserNameTo;
+  @override
+  void initState() { 
+    super.initState();
+    this.socketService = Provider.of<SocketService>(context, listen: false);
+    this.authService = Provider.of<AuthService>(context, listen: false);
+    this.userService = Provider.of<UserService>(context, listen: false);
+    this.socketService.socket.on('personal-message', _listenMessage);
+    print( userService.petUserNameTo );
+    _loadMessages( userService.petUserNameTo );
+  }
+
+  void _loadMessages( String petUserNameTo ) async{
+    List<Last30> chat = await this.userService.retrieveMessage( petUserNameTo );
+    final history = chat.map((e) => new ChatMessage(
+      texto: e.msg,
+      uid: e.from,
+      animationController: new AnimationController(vsync: this, duration: Duration(milliseconds: 0))..forward(),
+    
+    ));
+    if(mounted) {
+      setState(() {
+      _messages.insertAll(0, history);
+    });
+    }
+    
+  }
+
+  void _listenMessage( dynamic payload ) {
+    ChatMessage message = new ChatMessage(
+      texto: payload['msg'], 
+      uid: payload['from'], 
+      animationController: AnimationController(vsync: this, duration: new Duration(milliseconds: 300))
+    );
+    if(mounted){
+      setState(() {
+      _messages.insert(0, message);
+      });
+
+    // necesitamos arrancar la animación
+      message.animationController.forward();
+    }
+    
+  }
   @override
   Widget build(BuildContext context) {
-    
+    final arguments = ModalRoute.of(context).settings.arguments as Map;
+    this.petUserNameTo = arguments['petUserName'];
 
     return Scaffold(
       appBar: AppBar(
@@ -23,11 +76,11 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           child: Column(
             children: <Widget>[
               CircleAvatar(
-                child: Text('SM', style: TextStyle(fontSize: 12)),
-                backgroundColor: Colors.blue[100],
+                // child: Text('SM', style: TextStyle(fontSize: 12)),
+                backgroundImage: NetworkImage(arguments['profileImage']),
                 maxRadius: 15,
               ),
-              Text('Salmon',style: TextStyle(color: Colors.black, fontSize: 12),)
+              Text(arguments['petUserName'],style: TextStyle(color: Colors.black, fontSize: 12),)
             ],
           ),
         ),
@@ -115,16 +168,16 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   }
   // aqui haremos instancias de los mensajes, cada vez que se presione el submit
   // Para insertar 
-  _handleSubmit( String texto ) {
-
+  _handleSubmit( String texto ) async{
+    String petUserName = await AuthService.getPetUserName();
     if(texto.length == 0) return;
 
     print(texto);
     _textController.clear();
     _focusNode.requestFocus();
-
-    final newMessage = new ChatMessage(
-      uid: '123', 
+    if(mounted) {
+      final newMessage = new ChatMessage(
+      uid: petUserName, 
       texto: texto,
       animationController: AnimationController(vsync: this, duration: Duration(milliseconds: 500)),//el this está disponibler gracias a la mezcla  
     );
@@ -134,15 +187,17 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     setState(() {
       _estaEscribiendo = false;
     });
+    }
+    
 
 
     // en este punto ya pudimos enviar mensajes al socket service, pero hace falta hacer que el 
     // servidor esté a la escucha de éstos 
-    // this.socketService.emit('mensaje-personal',{
-    //   'de'   : this.authService.usuario.iud,
-    //   'para' : this.chatService.usuarioPara.iud,
-    //   'msg'  : texto 
-    // });
+    this.socketService.emit('personal-message',{
+      'from'   : petUserName,
+      'to' : this.petUserNameTo,
+      'msg'  : texto 
+    });
   }
 
   // cuando terminemos de usar esta página debemos de eliminarla, debido a que hacemos muchas instancias 

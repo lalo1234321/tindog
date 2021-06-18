@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tindog/models/movie_response.dart';
 import 'package:tindog/pages/chat_page.dart';
+import 'package:tindog/pages/notifications_page.dart';
 import 'package:tindog/pages/settings_page.dart';
 import 'package:tindog/pages/users_page.dart';
 import 'package:tindog/widgets/home_body.dart';
@@ -111,7 +112,7 @@ class _MatchPageState extends State<MatchPage> {
       }
       break;
       case 2: {
-        return HomeBody();
+        return NotificationsPage();
       }
       break;
       case 3: {

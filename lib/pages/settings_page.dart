@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tindog/services/auth_service.dart';
+import 'package:tindog/services/socket_service.dart';
+import 'package:tindog/services/user_service.dart';
 
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
-    final authService = Provider.of<AuthService>(context);
+    final authService = Provider.of<AuthService>(context, listen:  true);
+    final socketService = Provider.of<SocketService>(context, listen: false);
+    bool premium = AuthService.user.premium;
     final petName = authService.petName;
     return Scaffold(
       
@@ -34,25 +43,41 @@ class SettingsPage extends StatelessWidget {
                     title: Text('Cambiar password'),
                     trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.money, color: Colors.blue,),
-                    title: Text('Cambiar a premium'),
-                    trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'premium');
+                    },
+                    child: ListTile(
+                      leading: Icon(Icons.money, color: Colors.blue,),
+                      title: Text('Cambiar a premium'),
+                      trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                    ),
                   ),
-                  ListTile(
+                  (premium) ? ListTile(
                     leading: Icon(Icons.pets, color: Colors.blue,),
                     title: Text('Registrar una mascota'),
                     trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
-                  ),
+                  ) : Container(
+                    color: Colors.blue[300],
+                    child: ListTile(
+                      
+                      leading: Icon(Icons.pets, color: Colors.white,),
+                      title: Text('Registrar una mascota'),
+                      trailing: Icon(Icons.keyboard_arrow_right, color: Colors.white,),
+                    ),
+                  )
+                  ,
                   ListTile(
                     leading: Icon(Icons.exit_to_app, color: Colors.blue,),
                     title: Text('Cerrar sesión'),
                     trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
-                    onTap: () {
+                    onTap: () async{
                       //TODO desconectar de nuestro socket server
                       // como yo no quiero instanciar todo el authservice podemos entrar a los métodos estáticos
                       // por eso es imporetante trabajar con métodos estáticos según nos convenga
                       // socketService.disconnect();
+                      await authService.logout();
+                      await socketService.disconnect();
                       Navigator.pushReplacementNamed(context, 'login');
                       // AuthService.deleteToken();
                       //  en este punto ya se borró el token y cuand0 reiniciemos la app la loading page nos
