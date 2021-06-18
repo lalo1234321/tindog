@@ -107,7 +107,7 @@ class LoginPage extends StatelessWidget {
                   title: 'Registrarse',
                   hasBorder: true,
                   onChanged: () {
-                    Navigator.pushReplacementNamed(context, 'register');
+                    Navigator.pushNamed(context, 'register');
                   },
                 ),
                 

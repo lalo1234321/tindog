@@ -23,16 +23,18 @@ bool isCvvFocused = false;
     
     if (arguments != null) print(arguments['plan']);  
     return Scaffold(
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
 
-      children:<Widget>[
-        SizedBox(height: 20),
-        creditCard(),
-        _form(),
-        SizedBox(height: 0,),
-        confirmButton( userService, arguments )
-      ] 
-      
+        children:<Widget>[
+          SizedBox(height: 20),
+          creditCard(),
+          _form(),
+          SizedBox(height: 0,),
+          confirmButton( userService, arguments )
+        ] 
+        
+        ),
       )
     );
     
@@ -122,7 +124,7 @@ bool isCvvFocused = false;
             TextButton(
             child: Text("Aceptar"),
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.pushNamed(context, 'match');
             }),
           ],
         );

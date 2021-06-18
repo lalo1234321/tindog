@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:tindog/helpers/env.dart';
 import 'package:tindog/models/login_response.dart';
 import 'package:tindog/models/owned_pets_response.dart';
+import 'package:tindog/models/register_response.dart';
 
 class AuthService with ChangeNotifier {
   final _storage = new FlutterSecureStorage();
@@ -62,6 +63,44 @@ class AuthService with ChangeNotifier {
 
   }
 
+
+  Future<dynamic> register( String firstName, String lastName, String userName , String email, String password, String age, String state, String town ) async{
+    int newAge = int.parse(age);
+    this.autenticando = true;
+    final data = {
+    "firstName": firstName,
+    "lastName": lastName,
+    "userName": userName,
+    "email": email,
+    "password": password,
+    "age": newAge,
+    "state": state,
+    "town": town
+    
+    };
+
+    final response = await http.post('http://${Env.ip}:${Env.port}/register',
+    body: jsonEncode(data),
+    headers: {
+        'Content-Type': 'application/json'
+      }
+    );
+    print(response.body);
+    this.autenticando = false;
+    final registerResponse = registerResponseFromJson(response.body);
+    if( response.statusCode == 200 ) {
+      
+      
+
+      
+      return true;
+    } else {
+      
+      return registerResponse.message;
+    }
+
+  }
+
   Future<bool> isLoogedIn() async{
     final token = await this._storage.read(key: 'token');
     print(token); 
@@ -96,6 +135,8 @@ class AuthService with ChangeNotifier {
   }
   Future logout() async{
     await _storage.delete(key: 'token');
+    await _storage.delete(key:'petName');
+    await _storage.delete(key:'petId');
   }
   static Future<String> getPetName() async{
     final _storage = new FlutterSecureStorage();
