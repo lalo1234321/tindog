@@ -12,6 +12,7 @@ class AuthService with ChangeNotifier {
   final _storage = new FlutterSecureStorage();
   bool _autenticando = false;
   String petName; 
+  String myPetUserName;
   // static OwnedPet pet;
   static User user;
    
@@ -118,6 +119,7 @@ class AuthService with ChangeNotifier {
   }
   Future savePetUserName(String petUserName) async{
     await _storage.write(key: 'petUserName', value: petUserName);
+    this.myPetUserName = petUserName;
     //this.idPet = idPet;
   }
   static Future<String> getPetUserName() async{

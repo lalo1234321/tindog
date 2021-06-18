@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:tindog/helpers/env.dart';
+import 'package:tindog/models/retrieve_chat_response.dart';
 import 'package:tindog/models/usuario.dart';
+import 'package:tindog/services/socket_service.dart';
+import 'package:tindog/services/user_service.dart';
 
 
 class UsersPage extends StatefulWidget {
@@ -10,24 +15,31 @@ class UsersPage extends StatefulWidget {
 
 class _UsersPageState extends State<UsersPage> {
   RefreshController _refreshController = RefreshController(initialRefresh: false);
-
-  final usuarios = [
-    Usuario(uid: '1',nombre: 'Lalo', email: 'test1@test', online: true),
-    Usuario(uid: '2',nombre: 'Edgar', email: 'test2@test', online: true),
-    Usuario(uid: '3',nombre: 'Luis', email: 'test3@test', online: true),
-    Usuario(uid: '4',nombre: 'Alberto', email: 'test4@test', online: false),
-    Usuario(uid: '1',nombre: 'Lalo', email: 'test1@test', online: true),
-    Usuario(uid: '2',nombre: 'Edgar', email: 'test2@test', online: true),
-    Usuario(uid: '3',nombre: 'Luis', email: 'test3@test', online: true),
-    Usuario(uid: '4',nombre: 'Alberto', email: 'test4@test', online: false),
-    Usuario(uid: '1',nombre: 'Lalo', email: 'test1@test', online: true),
-    Usuario(uid: '2',nombre: 'Edgar', email: 'test2@test', online: true),
-    Usuario(uid: '3',nombre: 'Luis', email: 'test3@test', online: true),
-    Usuario(uid: '4',nombre: 'Alberto', email: 'test4@test', online: false)
+  UserService userService;
+  List _usuarios = [
+    // Usuario(uid: '1',nombre: 'Lalo', email: 'test1@test', online: true),
+    // Usuario(uid: '2',nombre: 'Edgar', email: 'test2@test', online: true),
+    // Usuario(uid: '3',nombre: 'Luis', email: 'test3@test', online: true),
+    // Usuario(uid: '4',nombre: 'Alberto', email: 'test4@test', online: false),
+    // Usuario(uid: '1',nombre: 'Lalo', email: 'test1@test', online: true),
+    // Usuario(uid: '2',nombre: 'Edgar', email: 'test2@test', online: true),
+    // Usuario(uid: '3',nombre: 'Luis', email: 'test3@test', online: true),
+    // Usuario(uid: '4',nombre: 'Alberto', email: 'test4@test', online: false),
+    // Usuario(uid: '1',nombre: 'Lalo', email: 'test1@test', online: true),
+    // Usuario(uid: '2',nombre: 'Edgar', email: 'test2@test', online: true),
+    // Usuario(uid: '3',nombre: 'Luis', email: 'test3@test', online: true),
+    // Usuario(uid: '4',nombre: 'Alberto', email: 'test4@test', online: false)
   ];
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userService = Provider.of<UserService>(context, listen: false);
+    _loadChats();
+  }
   @override
   Widget build(BuildContext context) {
+    final socketService = Provider.of<SocketService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         // title: Text(usuario.nombre, style: TextStyle(color: Colors.black87),),
@@ -49,13 +61,13 @@ class _UsersPageState extends State<UsersPage> {
         actions: <Widget>[
           Container(
             margin: EdgeInsets.only( right: 10 ),
-            child: Icon(Icons.bolt, color: Colors.red,),
+            // child: Icon(Icons.bolt, color: Colors.red,),
             // child: Icon(Icons.check_circle, color: Colors.blue,),
-            // child: ( socketService.serverStatus == ServerStatus.Online) 
-            //               ? 
-            //         Icon(Icons.check_circle, color: Colors.blue,)
-            //                 :
-            //         Icon(Icons.bolt, color: Colors.red,),
+            child: ( socketService.serverStatus == ServerStatus.Online) 
+                          ? 
+                    Icon(Icons.check_circle, color: Colors.blue,)
+                            :
+                    Icon(Icons.bolt, color: Colors.red,),
           )
         ],
       ),
@@ -67,8 +79,9 @@ class _UsersPageState extends State<UsersPage> {
           complete: Icon(Icons.check, color: Colors.blue[400],),
           waterDropColor: Colors.blue[400],
         ),
-        onRefresh: () {
+        onRefresh: () async{
           print('actualizando chats');
+          _loadChats();
           // _cargarUsuarios();
         },
         child: _listViewUsuarios(),
@@ -80,28 +93,29 @@ class _UsersPageState extends State<UsersPage> {
     return ListView.separated(
       physics: BouncingScrollPhysics(),
       itemBuilder: (BuildContext context,i) {
-        return _usuarioListTile(usuarios[i]);
+        return _usuarioListTile(_usuarios[i]);
       },
       separatorBuilder: (BuildContext context,i) {
         return Divider();
       },
-      itemCount: usuarios.length,
+      itemCount: _usuarios.length,
       
     );
   }
 
-  ListTile _usuarioListTile(Usuario usuario) {
+  ListTile _usuarioListTile(AcceptedPet usuario) {
+    String result = usuario.profileImageUri.replaceAll("localhost", Env.ip);
     return ListTile(
-          title: Text(usuario.nombre),
-          subtitle: Text(usuario.email),
+          title: Text(usuario.username),
+          subtitle: Text(usuario.id),
           leading: CircleAvatar(
-            child: Text(usuario.nombre.substring(0,2)),
+            backgroundImage: NetworkImage('http://'+result),
           ),
           trailing: Container(
             width: 10,
             height: 10,
             decoration: BoxDecoration(
-              color: (usuario.online) ? Colors.green : Colors.grey,
+              color: (usuario.owner.isOnline) ? Colors.green : Colors.grey,
               borderRadius: BorderRadius.circular(100)
             ),
           ),
@@ -111,12 +125,24 @@ class _UsersPageState extends State<UsersPage> {
             // Debo de invesigar cuando ponerle true y cuando false
             // final chatService = Provider.of<ChatService>(context, listen: false);
             // chatService.usuarioPara = usuario;
-            print(usuario.nombre);
-            Navigator.pushNamed(context, 'chat');
+            // print(usuario.nombre);
+            this.userService.petUserNameTo = usuario.username;
+            Navigator.pushNamed(context, 'chat', arguments: {
+              'petUserName': usuario.username,
+              'profileImage': 'http://'+result
+            });
 
             // Navigator.pushNamed(context, 'chat');
           },
         );
   }
-
+   _loadChats() async{
+    
+    this._usuarios = await userService.retrieveChat();
+    setState(() {
+      
+    });
+    // await Future.delayed(Duration( milliseconds: 1000 ));
+    _refreshController.refreshCompleted();
+  }
 }

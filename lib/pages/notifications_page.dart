@@ -111,11 +111,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            TextButton(onPressed: ()  {
+            TextButton(onPressed: ()  async{
               //TODO endpoint para modificar el estado de la notificación a true 
               //crear un chat entre las dos mascotas con los datos de la notificación
               // eliminar notificación
-              
+              await userService.acceptChat(from);
+              await userService.deleteNotification(id);
+              setState(() {
+                
+              });
               print('aceptando invitación');
             }, child: Icon(Icons.mark_chat_read)),
             TextButton(onPressed: ()  async{

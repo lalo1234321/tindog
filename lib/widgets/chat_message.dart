@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tindog/services/auth_service.dart';
 
 // este widget servirá para dibujar las burbujas del chat
 // debo de identificar cuando es un mensaje mio o de otra persona
@@ -8,7 +10,7 @@ class ChatMessage extends StatelessWidget {
   final String texto;
   final String uid;
   final AnimationController animationController;
-
+  
   const ChatMessage({
     Key key, 
     @required this.texto, 
@@ -20,12 +22,13 @@ class ChatMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     // para agregar la animación se necesita envol<ver el contenedor en un fadeTransition
     // para que los mensajes se vean más naturales envolvemos el container en un SizeTransition
+    final authService = Provider.of<AuthService>(context, listen: false);
     return FadeTransition(
       opacity: animationController,
       child: SizeTransition(
         sizeFactor: CurvedAnimation(parent: animationController, curve: Curves.easeOut),
         child: Container(
-          child: (this.uid == '123')
+          child: (this.uid == authService.myPetUserName)
           ? _myMessage()
           : _notMyMessage(),
         ),
@@ -62,5 +65,8 @@ class ChatMessage extends StatelessWidget {
         ),
       )
     );
+  }
+  void getPetUserName() async{
+
   }
 }
