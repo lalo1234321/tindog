@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:provider/provider.dart';
-import 'package:tindog/services/auth_service.dart';
 import 'package:tindog/services/user_service.dart';
 
 
@@ -80,12 +79,12 @@ bool isCvvFocused = false;
         obscureNumber: true,
         cardNumberDecoration: const InputDecoration(
           border: OutlineInputBorder(),
-          labelText: 'Number',
+          labelText: 'Número',
           hintText: 'XXXX XXXX XXXX XXXX',
         ),
         expiryDateDecoration: const InputDecoration(
           border: OutlineInputBorder(),
-          labelText: 'Expired Date',
+          labelText: 'Fecha de expiración',
           hintText: 'XX/XX',
 
         ),
@@ -97,7 +96,7 @@ bool isCvvFocused = false;
         cardHolderDecoration: const InputDecoration(
           
           border: OutlineInputBorder(),
-          labelText: 'Card Holder Name',
+          labelText: 'Portador de la tarjeta',
         ),
       );
 
