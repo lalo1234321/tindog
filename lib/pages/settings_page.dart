@@ -33,14 +33,24 @@ class _SettingsPageState extends State<SettingsPage> {
                 trailing: Icon(Icons.edit, color: Colors.white,),
               ),
             ),
-            SizedBox(height: 50,),
+            SizedBox(height: 10,),
             Card(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
               child: Column(
                 children: <Widget>[
                   ListTile(
                     leading: Icon(Icons.lock_outline, color: Colors.blue,),
-                    title: Text('Cambiar password'),
+                    title: Text('Cambiar contraseña'),
+                    trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.house, color: Colors.blue,),
+                    title: Text('Cambiar estado'),
+                    trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.house_outlined, color: Colors.blue,),
+                    title: Text('Cambiar municipio'),
                     trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
                   ),
                   GestureDetector(
@@ -53,10 +63,16 @@ class _SettingsPageState extends State<SettingsPage> {
                       trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
                     ),
                   ),
-                  (premium) ? ListTile(
-                    leading: Icon(Icons.pets, color: Colors.blue,),
-                    title: Text('Registrar una mascota'),
-                    trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                  (premium) ? GestureDetector(
+                    onTap: () {
+                        print('navegando');
+                        Navigator.pushNamed(context, 'registerPet'); 
+                    },
+                    child: ListTile(
+                      leading: Icon(Icons.pets, color: Colors.blue,),
+                      title: Text('Registrar una mascota'),
+                      trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                    ),
                   ) : Container(
                     color: Colors.blue[300],
                     child: ListTile(
@@ -64,9 +80,27 @@ class _SettingsPageState extends State<SettingsPage> {
                       leading: Icon(Icons.pets, color: Colors.white,),
                       title: Text('Registrar una mascota'),
                       trailing: Icon(Icons.keyboard_arrow_right, color: Colors.white,),
+                      
                     ),
                   )
                   ,
+                  (premium) ? ListTile(
+                    leading: Icon(Icons.place, color: Colors.blue,),
+                    title: Text('Buscar veterinarias más cercanas'),
+                    trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                    onTap: () async{
+                      Navigator.pushNamed(context, 'search');
+                    },
+                  ) : Container(
+                    color: Colors.blue[300],
+                    child: ListTile(
+                      
+                      leading: Icon(Icons.pets, color: Colors.white,),
+                      title: Text('Buscar veterinarias más cercanas'),
+                      trailing: Icon(Icons.keyboard_arrow_right, color: Colors.white,),
+                    ),
+                  ),
+                  
                   ListTile(
                     leading: Icon(Icons.exit_to_app, color: Colors.blue,),
                     title: Text('Cerrar sesión'),
