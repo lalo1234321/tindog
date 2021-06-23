@@ -160,8 +160,8 @@ class UserService with ChangeNotifier{
     }
 
 
-    Future registerPet(String userName, String name, String age, String specie, String breed, File profileImage, File certificateImage, String gender ) async{
-    List<String> vaccines = ['viruela', 'varicela', 'covid'];
+    Future registerPet(String userName, String name, String age, String specie, String breed, File profileImage, File certificateImage, String gender,List vaccine) async{
+    List<String> _vaccines = vaccine;
     final token = await AuthService.getToken();
     this.autenticando = true;
     Map<String, String> headers = { 
@@ -178,8 +178,8 @@ class UserService with ChangeNotifier{
     request.fields['specie'] = specie;
     request.fields['breed'] = breed;
     request.fields['gender'] = gender;
-    for( int i = 0; i < vaccines.length; i++ ) {
-      request.fields['vaccines[$i]'] = '${vaccines[i]}';
+    for( int i = 0; i < _vaccines.length; i++ ) {
+      request.fields['vaccines[$i]'] = '${_vaccines[i]}';
     }
     
     var profile = await http.MultipartFile.fromPath("profileImage", profileImage.path,contentType: MediaType('image','jpg'));

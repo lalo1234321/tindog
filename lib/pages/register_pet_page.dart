@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:tindog/services/user_service.dart';
 import 'package:tindog/widgets/btn_azul.dart';
 import 'package:tindog/widgets/wave_widget.dart';
-import 'package:tindog/widgets/custom_input.dart';
 enum SingingCharacter { macho, hembra }
  
  class RegisterPet extends StatefulWidget{
@@ -20,8 +19,7 @@ enum SingingCharacter { macho, hembra }
   File imageFile, imageFile2;
   SingingCharacter _gender = SingingCharacter.macho;
   String _namePet =  '';
-  String _agePet = '';
-  String _especie = '';
+  String _especiepet = '';
   String _breed = '';
   String _userName = '';
   bool _picked = false;
@@ -29,6 +27,10 @@ enum SingingCharacter { macho, hembra }
   List<int> ages = [1,2,3,4,5,6,7,8,9,10,11,12,13];
   int selectedOption = 1;
   UserService userService;
+  List<String> _vregist= [];
+  List<Widget> _widgetvacunas =[];
+  String _vacunaf='';
+  int _i = 0;
   @override
   Widget build(BuildContext context) {
     this.userService = Provider.of<UserService>(context, listen: false);
@@ -78,15 +80,15 @@ enum SingingCharacter { macho, hembra }
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 SizedBox(height: 150),
-                _CargarImagen(),
+                _cargarImagen(),
                 SizedBox(height: 25),
                 _userNameInput(),
                 SizedBox(height: 25),
                 _crearNombreMascota(),
                 SizedBox(height: 25),
-                _Genero(),
+                _genero(),
                 SizedBox(height: 25),
-                _Especie(),
+                _especie(),
                 SizedBox(height: 25),
                 _breedInput(),
                 SizedBox(height: 25),
@@ -98,7 +100,9 @@ enum SingingCharacter { macho, hembra }
                 }, 
                 child: Text('Elije la foto del certificado médico')),
                 SizedBox(height: 25),
-                _BtnEnviar(),
+                _vacunas(context),
+                SizedBox(height: 25),
+                _btnEnviar(),
                 SizedBox(height: 25),
 
                ],
@@ -110,19 +114,8 @@ enum SingingCharacter { macho, hembra }
      );
   }
 
-Widget _Titulo(){
-  return Text(
-    'Registro Mascota',
-      style: TextStyle(
-          color: Colors.white,
-          fontSize: 40,
-          fontWeight: FontWeight.w900,
-          fontStyle: FontStyle.normal
-      ),
-  );
-}
 
- Widget _CargarImagen(){
+ Widget _cargarImagen(){
   return Column(
     children: [
      Padding(
@@ -190,8 +183,7 @@ Widget _Titulo(){
     );
   }
 
-
-  Widget _Genero(){
+  Widget _genero(){
      return Column(
       children: <Widget>[
         ListTile(
@@ -221,7 +213,8 @@ Widget _Titulo(){
       ],
     );
   }
-  Widget _Especie(){
+
+  Widget _especie(){
     return TextField(
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
@@ -238,7 +231,7 @@ Widget _Titulo(){
       ),
       onChanged: (valor){
         setState((){
-          _especie = valor;
+          _especiepet = valor;
         });
       },
     );
@@ -267,43 +260,82 @@ Widget _Titulo(){
     );
   }
 
-  Widget _Edad(){
+  void agregar(){
+    setState(() {
+          _widgetvacunas.add(SizedBox(height: 20),);
+          _widgetvacunas.add(_textFvacuna());
+        });
+  }
+
+  void quitar(){
+    setState(() {
+          _widgetvacunas.removeLast();
+          _widgetvacunas.removeLast();
+          _vregist.removeLast();
+    });
+  }
+
+  Widget _textFvacuna(){
     return TextField(
-      keyboardType: TextInputType.number,
+      textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20.0)
         ),
         suffixIcon: Icon(
-          Icons.favorite,
+          Icons.healing,
           color: Colors.blue,
         ),
-        icon: Icon(Icons.emoji_nature),
-        hintText: 'Escribe la edad de tu mascota en meses',
-        labelText: 'Edad de tu Mascota',
+        icon: Icon(Icons.pets),
+        hintText: 'Escribe la vacuna de tu mascota',
+        labelText: 'Vacuna de Tu Mascota',
       ),
-      onChanged: (valor) {
-        setState(() {
-          _agePet = valor;
+      onChanged: (valor){
+        setState((){
+          _vacunaf=valor;
         });
+        _vregist.add(_vacunaf);
       },
     );
-
   }
 
-  Widget _Vacunas(){
-    return MaterialApp(
-      theme: ThemeData(
-        primarySwatch: Colors.blue
-      ),
-      home: ListView(
-        
-      ),
-
+  Widget _vacunas(BuildContext context){
+    return Column(
+        children: <Widget>[
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FlatButton.icon(onPressed: (){
+                if(_i<5){
+                  agregar();
+                  _i++;
+                  }else{
+                   _showAlertDialog(context,"No permitido","No se puede agregar mas de 5 vacunas",() {
+                          Navigator.of(context).pop();
+                        });
+                  }
+              },icon: Icon(Icons.add),label: Text("Agregar Vacuna"),),
+              FlatButton.icon(onPressed: (){
+                if(_i>0){
+                  _i--;
+                  quitar();
+                }else{
+                  _showAlertDialog(context,"Error","No se pueden quitar mas vacunas",() {
+                          Navigator.of(context).pop();
+                        });
+                }
+              },icon: Icon(Icons.remove),label: Text("Quitar"),),
+            ],
+          ),
+          Column(
+            children: _widgetvacunas,
+          ),
+        ],
     );
-    
   }
-  Widget _BtnEnviar(){
+
+  Widget _btnEnviar(){
      return Container(
       padding: EdgeInsets.symmetric(horizontal: 30.0),
       child: BtnAzul(texto: "Enviar", onPressed: (userService.autenticando) ? null :() async{
@@ -324,11 +356,11 @@ Widget _Titulo(){
       print(imageFile2.path);
       print(realGender);
       print(_namePet);
-      print(_especie);
+      print(_especiepet);
       print(_breed);
       print(_userName);
       print(realAge);
-      final response = await userService.registerPet(_userName, _namePet, realAge, _especie, _breed, imageFile, imageFile2, realGender);
+      final response = await userService.registerPet(_userName, _namePet, realAge, _especiepet, _breed, imageFile, imageFile2, realGender,_vregist);
       if(response == false) {
         _showAlertDialog(context, 'Error', 'No se han enviado correctamemte los datos', () {
           Navigator.of(context).pop();
@@ -405,11 +437,7 @@ Widget _Titulo(){
         )
       ],
     );
-    
-    
-    
 }
-
 
   void _showAlertDialog( BuildContext context, String title, String subtitle, Function accept) {
     showDialog(
