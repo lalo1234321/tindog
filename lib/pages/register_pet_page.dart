@@ -293,8 +293,9 @@ enum SingingCharacter { macho, hembra }
       onChanged: (valor){
         setState((){
           _vacunaf=valor;
+          _vregist.add(_vacunaf);
         });
-        _vregist.add(_vacunaf);
+        
       },
     );
   }
@@ -317,6 +318,9 @@ enum SingingCharacter { macho, hembra }
                   }
               },icon: Icon(Icons.add),label: Text("Agregar Vacuna"),),
               FlatButton.icon(onPressed: (){
+                setState(() {
+                  
+                });
                 if(_i>0){
                   _i--;
                   quitar();

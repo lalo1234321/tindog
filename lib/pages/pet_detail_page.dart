@@ -163,14 +163,18 @@ class PetDetailPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   RaisedButton(
-                    onPressed: () async{
+                    onPressed: () {
                       print('Solicitando emparejamiento');
-                      String petUserName = await AuthService.getPetUserName();
+                      _showAlert(context, 'Todo correcto', 'Estás apunto de solicitar un emparejamiento. \nPresiona OK si deseas seguir con el proceso', () async{
+                        String petUserName = await AuthService.getPetUserName();
                       print(arguments['petId']);
                       socketService.emit('notify',{
                         'from': petUserName,
                         'to': arguments['username']
                       });
+                      Navigator.of(context).pop();
+                      });
+                      
                       // notificationService.petTo.id = arguments['id'];
                     },
                     shape:  RoundedRectangleBorder(
@@ -263,5 +267,20 @@ class PetDetailPage extends StatelessWidget {
     );
   }
 
-
+  void _showAlert( BuildContext context, String title, String subtitle, Function accept) {
+    showDialog(
+      context: context,
+      builder: (buildcontext) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(subtitle),
+          actions: <Widget>[
+            TextButton(
+            child: Text("Aceptar"),
+            onPressed: accept),
+          ],
+        );
+      }
+    );
+  }
 }

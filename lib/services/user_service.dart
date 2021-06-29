@@ -211,6 +211,31 @@ class UserService with ChangeNotifier{
 
   }
 
+
+  Future updatePassword ( String newPassword ) async{
+    print(newPassword);
+    try {
+      String token = await AuthService.getToken();
+      print(token);
+      Map<String, String> headers = { 
+      "token": token
+      };
+      final response = await http.put('http://${Env.ip}:${Env.port}/updatePassword',
+        headers: headers,
+        body: jsonEncode({
+          'password': 'password3'
+        })
+      );
+      print('Despues de la petición');
+      final responseBody = jsonDecode(response.body);
+      print(responseBody);
+
+
+    } catch(e) {
+      print(e);
+    }
+    
+  }
   // static Future<String> getToken() async{
   //   final _storage = new FlutterSecureStorage();
   //   final token = await _storage.read(key: 'token');
