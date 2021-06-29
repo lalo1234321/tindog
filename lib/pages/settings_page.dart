@@ -97,6 +97,23 @@ class _SettingsPageState extends State<SettingsPage> {
                     )
                     ,
                     (premium) ? ListTile(
+                      leading: Icon(Icons.monetization_on, color: Colors.blue,),
+                      title: Text('Comprar o vender una mascota'),
+                      trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue),
+                      onTap: () async{
+                        print('Viajando a compra y venta');
+                      },
+                    ) : Container(
+                      color: Colors.blue[300],
+                      child: ListTile(
+                        
+                        leading: Icon(Icons.monetization_on, color: Colors.white,),
+                        title: Text('Comprar o vender una mascota'),
+                        trailing: Icon(Icons.keyboard_arrow_right, color: Colors.white,),
+                      ),
+                    )
+                    ,
+                    (premium) ? ListTile(
                       leading: Icon(Icons.place, color: Colors.blue,),
                       title: Text('Buscar veterinarias más cercanas'),
                       trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),

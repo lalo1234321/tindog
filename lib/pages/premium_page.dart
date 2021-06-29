@@ -15,7 +15,7 @@ class _PremiumPageState extends State<PremiumPage> {
     return Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
-        backgroundColor: Colors.indigo[300],
+        backgroundColor: Colors.blue,
         automaticallyImplyLeading: false,
         title: Text("Planes de pago"),
       ),
@@ -28,7 +28,7 @@ class _PremiumPageState extends State<PremiumPage> {
             children: <Widget>[
               SizedBox(height: 70),
               SlimyCard(
-                color: Colors.indigo[300],
+                color: Colors.blue,
                 topCardWidget: topCardWidget((snapshot.data)
                     ? 'assets/img/pets.jpg'
                     : 'assets/img/pets1.jpg'),
@@ -117,14 +117,14 @@ class _PremiumPageState extends State<PremiumPage> {
         return SpeedDial(
           animatedIcon: AnimatedIcons.menu_close,
           animatedIconTheme: IconThemeData(size: 22),
-          backgroundColor: Colors.indigo[300],
+          backgroundColor: Colors.blue,
           visible: true,
           curve: Curves.bounceIn,
           children: [
                 // FAB 1
                 SpeedDialChild(
                 child: Icon(Icons.assignment_turned_in),
-                backgroundColor: Colors.indigo[300],
+                backgroundColor: Colors.blue,
                 onTap: () { 
                   Navigator.pushNamed(context, 'payment', arguments: {
                     'plan':1
@@ -135,11 +135,11 @@ class _PremiumPageState extends State<PremiumPage> {
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
                     fontSize: 16.0),
-                labelBackgroundColor: Colors.indigo[300]),
+                labelBackgroundColor: Colors.blue),
                 // FAB 2
                 SpeedDialChild(
                 child: Icon(Icons.assignment_turned_in),
-                backgroundColor: Colors.indigo[300],
+                backgroundColor: Colors.blue,
                 onTap: () {
                   Navigator.pushNamed(context, 'payment',arguments: {
                     'plan':2
@@ -153,7 +153,7 @@ class _PremiumPageState extends State<PremiumPage> {
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
                     fontSize: 16.0),
-                labelBackgroundColor: Colors.indigo[300])
+                labelBackgroundColor: Colors.blue)
           ],
         );
   }
