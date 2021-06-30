@@ -199,10 +199,15 @@ class _SettingsPageState extends State<SettingsPage> {
                         // redirigirá al login page
                       },
                     ),
-                    ListTile(
-                      leading: Icon(Icons.info, color: Colors.blue,),
-                      title: Text('Acerca de'),
-                      trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                    GestureDetector(
+                      onTap: () {
+                        //Navigator.pushNamed(context, 'about');
+                      },
+                      child: ListTile(
+                        leading: Icon(Icons.info, color: Colors.blue,),
+                        title: Text('Acerca de'),
+                        trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                      ),
                     )
                   ],
                 ),

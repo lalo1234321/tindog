@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:tindog/helpers/home_view.dart';
 import 'package:tindog/models/place.dart';
+import 'package:tindog/pages/about_page.dart';
 import 'package:tindog/pages/chat_page.dart';
 import 'package:tindog/pages/loading_page.dart';
 import 'package:tindog/pages/login_page.dart';
@@ -65,7 +66,8 @@ class MyApp extends StatelessWidget {
           'detail' : ( BuildContext context ) => PetDetailPage(),
           'search' : ( BuildContext context ) => Search(),
           'registerPet' : ( BuildContext context ) => RegisterPet(),
-          'marketPlace' : ( BuildContext context ) => MarketPlace()
+          'marketPlace' : ( BuildContext context ) => MarketPlace(),
+          'about' : (BuildContext context) => AboutPage()
         },
       ),
     );
