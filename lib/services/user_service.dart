@@ -212,18 +212,19 @@ class UserService with ChangeNotifier{
   }
 
 
-  Future updatePassword ( String newPassword ) async{
+  Future updatePassword( String newPassword ) async{
     print(newPassword);
     try {
       String token = await AuthService.getToken();
       print(token);
       Map<String, String> headers = { 
-      "token": token
+        'Content-Type': 'application/json; charset=UTF-8',
+        'token': token
       };
       final response = await http.put('http://${Env.ip}:${Env.port}/updatePassword',
         headers: headers,
         body: jsonEncode({
-          'password': 'password3'
+          'password': newPassword
         })
       );
       print('Despues de la petición');
@@ -236,9 +237,112 @@ class UserService with ChangeNotifier{
     }
     
   }
+  Future updateTown( String newTown ) async{
+    // print(newPassword);
+    try {
+      String token = await AuthService.getToken();
+      print(token);
+      Map<String, String> headers = { 
+        'Content-Type': 'application/json; charset=UTF-8',
+        'token': token
+      };
+      final response = await http.put('http://${Env.ip}:${Env.port}/updateTown',
+        headers: headers,
+        body: jsonEncode({
+          'town': newTown
+        })
+      );
+      print('Despues de la petición');
+      final responseBody = jsonDecode(response.body);
+      print(responseBody);
+
+
+    } catch(e) {
+      print(e);
+    }
+    
+  }
+
+  Future updateState( String newState ) async{
+    try {
+      String token = await AuthService.getToken();
+      print(token);
+      Map<String, String> headers = { 
+        'Content-Type': 'application/json; charset=UTF-8',
+        'token': token
+      };
+      final response = await http.put('http://${Env.ip}:${Env.port}/updateState',
+        headers: headers,
+        body: jsonEncode({
+          'state': newState 
+        })
+      );
+      print('Despues de la petición');
+      final responseBody = jsonDecode(response.body);
+      print(responseBody);
+
+
+    } catch(e) {
+      print(e);
+    }
+  }
   // static Future<String> getToken() async{
   //   final _storage = new FlutterSecureStorage();
   //   final token = await _storage.read(key: 'token');
   //   return token;
   // }
+
+  Future updatePetName( String newName ) async{
+    try {
+      String token = await AuthService.getToken();
+      String petId = await AuthService.getPetId();
+      print(token);
+      Map<String, String> headers = { 
+        'Content-Type': 'application/json; charset=UTF-8',
+        'token': token
+      };
+      final response = await http.put('http://${Env.ip}:${Env.port}/updateName/$petId',
+        headers: headers,
+        body: jsonEncode({
+          'name': newName
+        })
+      );
+      print('Despues de la petición');
+      final responseBody = jsonDecode(response.body);
+      print(responseBody);
+
+
+    } catch(e) {
+      print(e);
+    }
+
+    
+  }
+  Future updatePetAge( int newAge ) async{
+      try {
+      String token = await AuthService.getToken();
+      String petId = await AuthService.getPetId();
+      print(token);
+      Map<String, String> headers = { 
+        'Content-Type': 'application/json; charset=UTF-8',
+        'token': token
+      };
+      final response = await http.put('http://${Env.ip}:${Env.port}/updateAge/$petId',
+        headers: headers,
+        body: jsonEncode({
+          'age': newAge
+        })
+      );
+      print('Despues de la petición');
+      final responseBody = jsonDecode(response.body);
+      print(responseBody);
+
+
+    } catch(e) {
+      print(e);
+    }
+
+    }
+
+
 }

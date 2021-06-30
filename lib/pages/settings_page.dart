@@ -11,15 +11,20 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  List<int> ages = [1,2,3,4,5,6,7,8,9,10,11,12,13];
+  int selectedOption = 1;
   TextEditingController newPasswordCtl= TextEditingController();
-
+  TextEditingController newTownCtl = TextEditingController();
+  TextEditingController newStateCtl = TextEditingController();
+  TextEditingController newPetNameCtl = TextEditingController();
+  TextEditingController newPetAgeCtl = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context, listen:  true);
     final socketService = Provider.of<SocketService>(context, listen: false);
     final userService = Provider.of<UserService>(context, listen: false);
     bool premium = AuthService.user.premium;
-    final petName = authService.petName;
+    String petName = authService.petName;
     return Scaffold(
       
       body: Center(
@@ -32,22 +37,52 @@ class _SettingsPageState extends State<SettingsPage> {
                 margin: EdgeInsets.all(8.0),
                 color: Colors.blue,
                 child: ListTile(
-                  onTap: () {},
+                  onTap: (premium) ? () {
+                    _showAlertDialog(context, () async{
+                          
+                          await userService.updatePetName(this.newPetNameCtl.text);
+                          Navigator.of(context).pop();
+                          await authService.savePetName(newPetNameCtl.text);
+                          setState(() {
+                             
+                          });
+                        },this.newPetNameCtl);
+                  } : null,
                   title: Text(petName, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),),
                   trailing: Icon(Icons.edit, color: Colors.white,),
                 ),
               ),
+              // Card(
+              //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              //   margin: EdgeInsets.all(8.0),
+              //   color: Colors.blue,
+              //   child: ListTile(
+              //     onTap: (premium) ? () {
+              //       _showAlertDialogAge(context, () async{
+              //             await userService.updatePetAge(selectedOption);
+              //             Navigator.of(context).pop();
+                          
+              //           },this.newPetAgeCtl);
+              //     } : null,
+              //     title: Text('Modificar edad de la mascota', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),),
+              //     trailing: Icon(Icons.edit, color: Colors.white,),
+              //   ),
+              // ),
               SizedBox(height: 30,),
               Card(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                 child: Column(
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async{
+                        //await userService.updateTown('Guanajuato');
+                        //await userService.updatePassword('nada');
                         _showAlertDialog(context, () async{
+                          print(newPasswordCtl.text);
+                          print(this.newPasswordCtl.text);
                           await userService.updatePassword(this.newPasswordCtl.text);
                           Navigator.of(context).pop();
-                        });
+                        },this.newPasswordCtl);
                       },
                       child: ListTile(
                         leading: Icon(Icons.lock_outline, color: Colors.blue,),
@@ -55,15 +90,32 @@ class _SettingsPageState extends State<SettingsPage> {
                         trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
                       ),
                     ),
-                    ListTile(
-                      leading: Icon(Icons.house, color: Colors.blue,),
-                      title: Text('Cambiar estado'),
-                      trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                    GestureDetector(
+                      onTap: () {
+                        _showAlertDialog(context, () async{
+                          
+                          await userService.updateState(this.newStateCtl.text);
+                          Navigator.of(context).pop();
+                        },this.newStateCtl);
+                      },
+                      child: ListTile(
+                        leading: Icon(Icons.house, color: Colors.blue,),
+                        title: Text('Cambiar estado'),
+                        trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                      ),
                     ),
-                    ListTile(
-                      leading: Icon(Icons.house_outlined, color: Colors.blue,),
-                      title: Text('Cambiar municipio'),
-                      trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                    GestureDetector(
+                      onTap: () {
+                        _showAlertDialog(context, () async{
+                          await userService.updateTown(this.newTownCtl.text);
+                          Navigator.of(context).pop();
+                        },this.newTownCtl);
+                      },
+                      child: ListTile(
+                        leading: Icon(Icons.house_outlined, color: Colors.blue,),
+                        title: Text('Cambiar municipio'),
+                        trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                      ),
                     ),
                     GestureDetector(
                       onTap: () {
@@ -163,14 +215,14 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
     );
   }
-  void _showAlertDialog( BuildContext context, Function accept) {
+  void _showAlertDialog( BuildContext context, Function accept, TextEditingController controller) {
     showDialog(
       context: context,
       builder: (buildcontext) {
         return AlertDialog(
           title: Text('Editando'),
           content: TextField(
-            controller: this.newPasswordCtl,
+            controller: controller,
             decoration: InputDecoration(
               labelText: 'editar',
               prefixIcon: Icon(
@@ -194,4 +246,61 @@ class _SettingsPageState extends State<SettingsPage> {
       }
     );
   }
+  void _showAlertDialogAge( BuildContext context, Function accept, TextEditingController controller) {
+    showDialog(
+      context: context,
+      builder: (buildcontext) {
+        return AlertDialog(
+          title: Text('Editando'),
+          content: _createDropDown( buildcontext),
+          actions: <Widget>[
+            TextButton(
+            child: Text("Aceptar"),
+            onPressed: accept),
+          ],
+        );
+        
+      }
+    );
+  }
+
+  List<DropdownMenuItem<int>> getOpcionesDropdown() {
+    List<DropdownMenuItem<int>> lista = new List();
+    ages.forEach((element) {
+      lista.add( DropdownMenuItem(
+          child: Text(element.toString()),
+          value: element,
+      ));  
+    });
+    return lista;
+  }
+
+  Widget _createDropDown(BuildContext context) {
+    return Row(
+      children: [
+        Row(
+          children: <Widget>[
+            Icon(Icons.select_all),
+            SizedBox(width:30.0),
+            DropdownButton(
+              
+            value: selectedOption,
+            items:getOpcionesDropdown(),
+            onChanged: (opt) {
+              setState(() {
+                selectedOption=opt;
+              });
+              print(selectedOption);
+            },
+          )
+  
+          ],
+        ),
+        Container(
+          child: Text('Edad elegida $selectedOption'),
+        )
+      ],
+    );
+}
+
 }
