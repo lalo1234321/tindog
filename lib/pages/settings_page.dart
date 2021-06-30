@@ -101,7 +101,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       title: Text('Comprar o vender una mascota'),
                       trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue),
                       onTap: () async{
-                        print('Viajando a compra y venta');
+                        Navigator.pushNamed(context, 'marketPlace');
                       },
                     ) : Container(
                       color: Colors.blue[300],

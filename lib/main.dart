@@ -9,6 +9,7 @@ import 'package:tindog/models/place.dart';
 import 'package:tindog/pages/chat_page.dart';
 import 'package:tindog/pages/loading_page.dart';
 import 'package:tindog/pages/login_page.dart';
+import 'package:tindog/pages/market_place.dart';
 import 'package:tindog/pages/match_page.dart';
 import 'package:tindog/pages/payment_page.dart';
 import 'package:tindog/pages/pet_detail_page.dart';
@@ -63,8 +64,8 @@ class MyApp extends StatelessWidget {
           'premium' : ( BuildContext context ) => PremiumPage(),
           'detail' : ( BuildContext context ) => PetDetailPage(),
           'search' : ( BuildContext context ) => Search(),
-          'registerPet' : ( BuildContext context ) => RegisterPet()
-
+          'registerPet' : ( BuildContext context ) => RegisterPet(),
+          'marketPlace' : ( BuildContext context ) => MarketPlace()
         },
       ),
     );
