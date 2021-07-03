@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Material App',
-        initialRoute: 'loading',
+        initialRoute: 'login',
         routes: {
           
           'login': ( BuildContext context ) => LoginPage(),

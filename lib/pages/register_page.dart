@@ -125,7 +125,7 @@ int selectedOption = 1;
                         //TODO mostrar alertas en caso de que falle el login
                         //socketServide.connect();
                         _showAlertDialog(context,'Gracias por registrarse', message, () {
-                          Navigator.pushReplacementNamed(context, 'login');
+                          Navigator.pushReplacementNamed(context, 'about');
                         });
 
                       } else {

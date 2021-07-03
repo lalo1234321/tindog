@@ -201,14 +201,28 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        //Navigator.pushNamed(context, 'about');
+                        _showAlertDialogText(context, 'Tinpets v1.0.0', 'Asesor: Mauro Sanchez Sanchez \nColaboradores:\nEduardo Domínguez Cordero\nAbraham Emanuel Morales Vallejo\nJaquelin Milagros Jardon Garcia\nCarlos Sanchez Montoya\nBruno Daniel Camacho Carbajal\nIssac Samuel carrillo Ortiz\nEmiliano Adolfo Nava Ceballos', () {
+                          Navigator.of(context).pop();
+                        });
                       },
                       child: ListTile(
                         leading: Icon(Icons.info, color: Colors.blue,),
                         title: Text('Acerca de'),
                         trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
                       ),
-                    )
+                    ),
+                    GestureDetector(
+                      onTap: () async{
+                        
+                        print('Eliminando usuario');
+                      },
+                      child: ListTile(
+                          leading: Icon(Icons.delete, color: Colors.blue,),
+                          title: Text('Eliminar mi cuenta'),
+                          trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                      ),
+                    ),
+                    
                   ],
                 ),
               )
@@ -307,5 +321,22 @@ class _SettingsPageState extends State<SettingsPage> {
       ],
     );
 }
+
+  void _showAlertDialogText( BuildContext context, String title, String subtitle, Function accept) {
+    showDialog(
+      context: context,
+      builder: (buildcontext) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(subtitle),
+          actions: <Widget>[
+            TextButton(
+            child: Text("Aceptar"),
+            onPressed: accept),
+          ],
+        );
+      }
+    );
+  }
 
 }

@@ -342,7 +342,23 @@ class UserService with ChangeNotifier{
       print(e);
     }
 
-    }
+  }
+  Future deleteUser() async{
+    try {
+      String token = await AuthService.getToken();
+      Map<String, String> headers = { 
+        'Content-Type': 'application/json; charset=UTF-8',
+        'token': token
+      };
+      final response = await http.put('http://${Env.ip}:${Env.port}/deleteUser',
+        headers: headers
+      );
 
+    } catch(e) {
+      print(e);
+    }
+    
+
+  }
 
 }

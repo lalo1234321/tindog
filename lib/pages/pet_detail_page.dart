@@ -85,7 +85,7 @@ class PetDetailPage extends StatelessWidget {
                 elevation: 2.0,
                 child: Padding(
                     padding: EdgeInsets.symmetric(vertical: 12,horizontal: 30),
-                    child: Text("Críticas",style: TextStyle(
+                    child: Text("Valoración",style: TextStyle(
                         letterSpacing: 2.0,
                         fontWeight: FontWeight.w300
                     ),))
@@ -185,7 +185,7 @@ class PetDetailPage extends StatelessWidget {
                         gradient: LinearGradient(
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
-                            colors: [Colors.pink,Colors.blueAccent]
+                            colors: [Colors.blue,Colors.blue]
                         ),
                         borderRadius: BorderRadius.circular(30.0),
                       ),
@@ -217,7 +217,7 @@ class PetDetailPage extends StatelessWidget {
                         gradient: LinearGradient(
                             begin: Alignment.centerLeft,
                             end: Alignment.centerRight,
-                            colors: [Colors.pink,Colors.blueAccent]
+                            colors: [Colors.blue,Colors.blue]
                         ),
                         borderRadius: BorderRadius.circular(80.0),
                       ),

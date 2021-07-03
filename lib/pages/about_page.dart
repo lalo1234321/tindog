@@ -11,34 +11,22 @@ class AboutPage extends StatefulWidget {
 class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
-    Scaffold(
-        drawer: Drawer(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 36),
-              ListTile(
-                title: Text('Load from Assets'),
-                onTap: () {
-                  changePDF(1);
-                },
-              ),
-              ListTile(
-                title: Text('Load from URL'),
-                onTap: () {
-                  changePDF(2);
-                },
-              ),
-              ListTile(
-                title: Text('Restore default'),
-                onTap: () {
-                  changePDF(3);
-                },
-              ),
-            ],
-          ),
-        ),
+    return Scaffold(
+        
         appBar: AppBar(
-          title: const Text('FlutterPluginPDFViewer'),
+          title: const Text('Términos y condiciones'),
+          actions: [
+            GestureDetector(
+              onTap: () {
+                Navigator.pushReplacementNamed(context, 'login');
+              },
+              child: Container(
+                padding: EdgeInsets.only(right: 20),
+                child: 
+                Center(child: Text('Aceptar'))
+              ),
+            )
+          ],
         ),
         body: Center(
           child: _isLoading
@@ -86,6 +74,7 @@ class _AboutPageState extends State<AboutPage> {
                   }, */
                 ),
         ),
+        
       );
   }
 
@@ -102,7 +91,7 @@ class _AboutPageState extends State<AboutPage> {
   }
 
   loadDocument() async {
-    document = await PDFDocument.fromAsset('assets/img/sample.pdf');
+    document = await PDFDocument.fromAsset('assets/img/TERMINOS_DE_USO.pdf');
 
     setState(() => _isLoading = false);
   }
