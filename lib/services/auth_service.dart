@@ -65,7 +65,9 @@ class AuthService with ChangeNotifier {
 
 
   Future<dynamic> register( String firstName, String lastName, String userName , String email, String password, String age, String state, String town ) async{
-    int newAge = int.parse(age);
+    print(age);
+    //(age == null) ? age = '0' : age = age;
+    //int newAge = int.parse(age);
     this.autenticando = true;
     final data = {
     "firstName": firstName,
@@ -73,7 +75,7 @@ class AuthService with ChangeNotifier {
     "userName": userName,
     "email": email,
     "password": password,
-    "age": newAge,
+    "age": age,
     "state": state,
     "town": town
     

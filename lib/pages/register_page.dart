@@ -40,7 +40,7 @@ int selectedOption = 1;
   Widget build(BuildContext context) {  
     final model = Provider.of<HomeView>(context);
     final authService = Provider.of<AuthService>(context, listen: false);
-    
+      
     return Scaffold(
       appBar: AppBar(title: Text('Registrar'),),
         body: SingleChildScrollView(
@@ -108,6 +108,7 @@ int selectedOption = 1;
                   hasBorder: true,
                   onChanged: authService.autenticando ? null :
                     () async{
+                      print(_inputFieldDateController.text);
                       // print('email ${emailCtl.text}\npassword ${passCtl.text}' );
                       final registerOk = await authService.register(
                         firstNameCtl.text,
@@ -235,6 +236,7 @@ int selectedOption = 1;
         print( years.round() );
         _inputFieldDateController.text = years.round().toString();
       });
+      
       
     }
   }

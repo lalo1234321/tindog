@@ -212,9 +212,25 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     GestureDetector(
+                      onTap: () {
+                        _showAlertDialogText(context,'Importante','¿Está seguro que quiere eliminar a esta mascota?\n\nUna vez eliminada esta mascota no podrá usarla para interactuar',() async{
+                          await userService.deletePet();
+                          Navigator.pushReplacementNamed(context, 'login');
+                        });
+                      },
+                      child: ListTile(
+                          leading: Icon(Icons.delete, color: Colors.blue,),
+                          title: Text('Eliminar mascota actual'),
+                          trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                      ),
+                    ),
+                    GestureDetector(
                       onTap: () async{
+                        _showAlertDialogText(context,'Importante','¿Está seguro que quiere eliminar su cuenta?\n \nTenga en cuenta que una vez eliminada ya no podrá acceder con ésta',() async{
+                          await userService.deleteUser();
+                          Navigator.pushReplacementNamed(context, 'login');
+                        });
                         
-                        print('Eliminando usuario');
                       },
                       child: ListTile(
                           leading: Icon(Icons.delete, color: Colors.blue,),
