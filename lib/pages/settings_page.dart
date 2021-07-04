@@ -38,15 +38,17 @@ class _SettingsPageState extends State<SettingsPage> {
                 color: Colors.blue,
                 child: ListTile(
                   onTap: (premium) ? () {
-                    _showAlertDialog(context, () async{
+
+                    Navigator.pushNamed(context, 'petSetting');
+                    // _showAlertDialog(context, () async{
                           
-                          await userService.updatePetName(this.newPetNameCtl.text);
-                          Navigator.of(context).pop();
-                          await authService.savePetName(newPetNameCtl.text);
-                          setState(() {
+                    //       await userService.updatePetName(this.newPetNameCtl.text);
+                    //       Navigator.of(context).pop();
+                    //       await authService.savePetName(newPetNameCtl.text);
+                    //       setState(() {
                              
-                          });
-                        },this.newPetNameCtl);
+                    //       });
+                    //     },this.newPetNameCtl);
                   } : null,
                   title: Text(petName, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500),),
                   trailing: Icon(Icons.edit, color: Colors.white,),

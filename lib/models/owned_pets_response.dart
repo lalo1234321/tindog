@@ -11,20 +11,16 @@ String ownedPetsResponseToJson(List<OwnedPetsResponse> data) => json.encode(List
 class OwnedPetsResponse {
     OwnedPetsResponse({
         this.ownedPets,
-        this.id,
     });
 
     List<OwnedPet> ownedPets;
-    String id;
 
     factory OwnedPetsResponse.fromJson(Map<String, dynamic> json) => OwnedPetsResponse(
         ownedPets: List<OwnedPet>.from(json["ownedPets"].map((x) => OwnedPet.fromJson(x))),
-        id: json["_id"],
     );
 
     Map<String, dynamic> toJson() => {
         "ownedPets": List<dynamic>.from(ownedPets.map((x) => x.toJson())),
-        "_id": id,
     };
 }
 
@@ -57,12 +53,12 @@ class OwnedPet {
     String name;
     int age;
     String specie;
-    String gender;
+    Gender gender;
     String profileImagePhysicalPath;
     String medicalCertificateImagePhysicalPath;
     String profileImageUri;
     String medicalCertificateImageUri;
-    String owner;
+    Owner owner;
     DateTime createdAt;
     DateTime updatedAt;
     int v;
@@ -76,12 +72,12 @@ class OwnedPet {
         name: json["name"],
         age: json["age"],
         specie: json["specie"],
-        gender: json["gender"],
+        gender: genderValues.map[json["gender"]],
         profileImagePhysicalPath: json["profileImagePhysicalPath"],
         medicalCertificateImagePhysicalPath: json["medicalCertificateImagePhysicalPath"],
         profileImageUri: json["profileImageURI"],
         medicalCertificateImageUri: json["medicalCertificateImageURI"],
-        owner: json["owner"],
+        owner: ownerValues.map[json["owner"]],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
@@ -96,14 +92,41 @@ class OwnedPet {
         "name": name,
         "age": age,
         "specie": specie,
-        "gender": gender,
+        "gender": genderValues.reverse[gender],
         "profileImagePhysicalPath": profileImagePhysicalPath,
         "medicalCertificateImagePhysicalPath": medicalCertificateImagePhysicalPath,
         "profileImageURI": profileImageUri,
         "medicalCertificateImageURI": medicalCertificateImageUri,
-        "owner": owner,
+        "owner": ownerValues.reverse[owner],
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
     };
+}
+
+enum Gender { F, M }
+
+final genderValues = EnumValues({
+    "F": Gender.F,
+    "M": Gender.M
+});
+
+enum Owner { THE_60_C517_AA852_A9152_E4719274 }
+
+final ownerValues = EnumValues({
+    "60c517aa852a9152e4719274": Owner.THE_60_C517_AA852_A9152_E4719274
+});
+
+class EnumValues<T> {
+    Map<String, T> map;
+    Map<T, String> reverseMap;
+
+    EnumValues(this.map);
+
+    Map<T, String> get reverse {
+        if (reverseMap == null) {
+            reverseMap = map.map((k, v) => new MapEntry(v, k));
+        }
+        return reverseMap;
+    }
 }
