@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:tindog/services/user_service.dart';
 import 'package:tindog/widgets/btn_azul.dart';
 import 'package:tindog/widgets/custom_input.dart';
 
@@ -13,6 +15,9 @@ class PetSettingsPage extends StatefulWidget {
 }
 
 class _PetSettingsPageState extends State<PetSettingsPage> {
+  TextEditingController newPetNameCtl = TextEditingController();
+  TextEditingController newPetAgeCtl = TextEditingController();
+  UserService userService;
   bool _picked = false;
   bool _picked1 = false;
   File imageFile, imageFile2;
@@ -32,6 +37,7 @@ class _PetSettingsPageState extends State<PetSettingsPage> {
   String _currentCity;
   @override
   Widget build(BuildContext context) {
+    this.userService = Provider.of<UserService>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Modificar datos de la máscota'),
@@ -102,10 +108,15 @@ class _PetSettingsPageState extends State<PetSettingsPage> {
               prefixIconData: Icons.pets,
               sufixIconData: Icons.pest_control_rounded,
               obscureText: false,
+              textController: newPetNameCtl,
             ),
             SizedBox(height: 20),
-            BtnAzul(texto: 'Guardar cambios', onPressed: () {
-              print('Guardar cambios');
+            BtnAzul(texto: 'Guardar cambios', onPressed: () async{
+              print('Guardar cambios ${newPetNameCtl.text}');
+              await this.userService.updatePetName(newPetNameCtl.text);
+              _showAlertDialogText(context, 'Datos actualizados', 'Regresaremos a la página de perfil para reflejar sus cambios', () {
+                Navigator.pushReplacementNamed(context, 'profile');
+              });
             })
           ],
         )
@@ -175,8 +186,12 @@ class _PetSettingsPageState extends State<PetSettingsPage> {
             ],
           ),
           SizedBox(height: 30,),
-          BtnAzul(texto: 'Guardar cambios', onPressed: () {
-            print('Guardando edad ${selectedOptionAge}');
+          BtnAzul(texto: 'Guardar cambios', onPressed: () async{
+            print('Guardando edad $selectedOptionAge');
+            await this.userService.updatePetAge(selectedOptionAge);
+            _showAlertDialogText(context, 'Datos actualizados', 'Regresaremos a la página de perfil para reflejar sus cambios', () {
+              Navigator.pushReplacementNamed(context, 'profile');
+            });
           })
         ],
       ),
@@ -201,8 +216,12 @@ class _PetSettingsPageState extends State<PetSettingsPage> {
           ),
         ),
       ),
-      BtnAzul(texto: 'Guardar cambios', onPressed: () {
-        print('Imagen de perfil');
+      BtnAzul(texto: 'Guardar cambios', onPressed: () async{
+        print('Imagen de perfil ${imageFile.path}');
+        await this.userService.updateProfileImage( imageFile );
+        _showAlertDialogText(context, 'Datos actualizados', 'Regresaremos a la página de perfil para reflejar sus cambios', () {
+          Navigator.pushReplacementNamed(context, 'profile');
+        });
       })
      ],
     ),
@@ -258,6 +277,22 @@ class _PetSettingsPageState extends State<PetSettingsPage> {
         imageFile2 = File(pickedFile.path);
       });
     }
+  }
+  void _showAlertDialogText( BuildContext context, String title, String subtitle, Function accept) {
+    showDialog(
+      context: context,
+      builder: (buildcontext) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(subtitle),
+          actions: <Widget>[
+            TextButton(
+            child: Text("Aceptar"),
+            onPressed: accept),
+          ],
+        );
+      }
+    );
   }
 
 }

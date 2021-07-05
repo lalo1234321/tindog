@@ -319,6 +319,7 @@ class UserService with ChangeNotifier{
     
   }
   Future updatePetAge( int newAge ) async{
+    print(newAge);
       try {
       String token = await AuthService.getToken();
       String petId = await AuthService.getPetId();
@@ -330,7 +331,7 @@ class UserService with ChangeNotifier{
       final response = await http.put('http://${Env.ip}:${Env.port}/updateAge/$petId',
         headers: headers,
         body: jsonEncode({
-          'age': newAge
+          'age': newAge.toString()
         })
       );
       print('Despues de la petición');
@@ -376,4 +377,83 @@ class UserService with ChangeNotifier{
       print(e);
     }
   }
+
+  Future updateProfileImage( File profileImage) async{
+    final token = await AuthService.getToken();
+    final petId = await AuthService.getPetId();
+    this.autenticando = true;
+    Map<String, String> headers = { 
+      "token": token
+    
+    };
+
+    var url = 'http://${Env.ip}:${Env.port}/pet/update/profilePicture/$petId';
+    var request = http.MultipartRequest('PUT', Uri.parse(url));
+    request.headers.addAll(headers);
+    var profile = await http.MultipartFile.fromPath("profilePic", profileImage.path,contentType: MediaType('image','jpg'));
+    // var certificate = await http.MultipartFile.fromPath("medicalCertificateImage", certificateImage.path,contentType: MediaType('image','jpg'));
+    request.files.add(profile);
+    // request.files.add(certificate);
+
+    var res = await request.send();
+    var responseData = await res.stream.toBytes();
+    var responseString = String.fromCharCodes(responseData);
+
+    var d = jsonDecode(responseString);
+    
+    print(d['message']);
+    print( res.statusCode );
+    this.autenticando = false;
+    //print(res);
+    if(res.statusCode == 200 ) {
+      return d['message'];
+    } else {
+      // debemos de mapear el error
+//      final respBody = jsonDecode(resp.body);
+      //return respBody['msg'];
+      return false;
+    }
+
+
+  }
+
+  Future updateMedicalCertificateImage( File medicalCertificateImage) async{
+    final token = await AuthService.getToken();
+    final petId = await AuthService.getPetId();
+    this.autenticando = true;
+    Map<String, String> headers = { 
+      "token": token
+    
+    };
+
+    var url = 'http://${Env.ip}:${Env.port}/pet/update/medicalCertificate/$petId';
+    var request = http.MultipartRequest('PUT', Uri.parse(url));
+    request.headers.addAll(headers);
+    var medical = await http.MultipartFile.fromPath("profilePic", medicalCertificateImage.path,contentType: MediaType('image','jpg'));
+    // var certificate = await http.MultipartFile.fromPath("medicalCertificateImage", certificateImage.path,contentType: MediaType('image','jpg'));
+    request.files.add(medical);
+    // request.files.add(certificate);
+
+    var res = await request.send();
+    var responseData = await res.stream.toBytes();
+    var responseString = String.fromCharCodes(responseData);
+
+    var d = jsonDecode(responseString);
+    
+    print(d['message']);
+    print( res.statusCode );
+    this.autenticando = false;
+    //print(res);
+    if(res.statusCode == 200 ) {
+      return d['message'];
+    } else {
+      // debemos de mapear el error
+//      final respBody = jsonDecode(resp.body);
+      //return respBody['msg'];
+      return false;
+    }
+
+
+  }
+
 }
