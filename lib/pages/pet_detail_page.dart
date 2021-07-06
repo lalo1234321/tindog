@@ -4,15 +4,31 @@ import 'package:tindog/helpers/env.dart';
 import 'package:tindog/services/auth_service.dart';
 import 'package:tindog/services/notification_service.dart';
 import 'package:tindog/services/socket_service.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 
-class PetDetailPage extends StatelessWidget {
+class PetDetailPage extends StatefulWidget {
+  @override
+  _PetDetailPageState createState() => _PetDetailPageState();
+}
+
+class _PetDetailPageState extends State<PetDetailPage> {
+  double visualStars;
+
   @override
   Widget build(BuildContext context) {
     final socketService = Provider.of<SocketService>(context, listen: false);
     final arguments = ModalRoute.of(context).settings.arguments as Map;
     String result = arguments['imageprofile'].replaceAll("localhost", Env.ip);
     String result1 = arguments['certificate'].replaceAll("localhost", Env.ip);
+    int stars = arguments['stars'];
+    int meetings = arguments['encounters'];
+    
+    if(stars == 0 && meetings == 0) {
+      visualStars = 0;
+    } else {
+      visualStars = stars/meetings;
+    }
     return Scaffold(
         body: SafeArea(
           child: Column(
@@ -83,12 +99,7 @@ class PetDetailPage extends StatelessWidget {
               Card(
                 margin: EdgeInsets.symmetric(horizontal: 20.0,vertical: 8.0),
                 elevation: 2.0,
-                child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12,horizontal: 30),
-                    child: Text("Valoración",style: TextStyle(
-                        letterSpacing: 2.0,
-                        fontWeight: FontWeight.w300
-                    ),))
+                child: _createRatingBar()
               ),
               SizedBox(
                 height: 15,
@@ -112,38 +123,19 @@ class PetDetailPage extends StatelessWidget {
                       Expanded(
                         child: Column(
                           children: [
-                            Text("Emparejamientos",
-                              style: TextStyle(
-                                  color: Colors.blueAccent,
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w600
-                              ),),
+                            Container(
+                              padding: EdgeInsets.only(left:10),
+                              child: Text("Emparejamientos",
+                                style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.w600
+                                ),),
+                            ),
                             SizedBox(
                               height: 7,
                             ),
-                            Text("15",
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.w300
-                              ),)
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        child:
-                        Column(
-                          children: [
-                            Text("Ventas",
-                              style: TextStyle(
-                                  color: Colors.blueAccent,
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.w600
-                              ),),
-                            SizedBox(
-                              height: 7,
-                            ),
-                            Text("10",
+                            Text(meetings.toString(),
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 22.0,
@@ -244,7 +236,6 @@ class PetDetailPage extends StatelessWidget {
       );
   }
 
-
   void _showAlertDialog( BuildContext context, String certificateImageUri ) {
     showDialog(
       context: context,
@@ -283,4 +274,18 @@ class PetDetailPage extends StatelessWidget {
       }
     );
   }
+
+  Widget _createRatingBar() {
+    return RatingBarIndicator(
+      rating: visualStars,
+      itemBuilder: (context, index) => Icon(
+          Icons.star,
+          color: Colors.amber,
+      ),
+      itemCount: 5,
+      itemSize: 50.0,
+      direction: Axis.horizontal,
+      );
+  }
+
 }

@@ -18,7 +18,7 @@ class CardSwiper extends StatelessWidget {
   Widget build(BuildContext context) {
      //De esta forma podemos modificar el tamaño de las cards
     final _screenSize = MediaQuery.of(context).size;
-
+    // print(results[0].stars);
     return Container(
       padding: EdgeInsets.only(top: 10.0),
       
@@ -44,7 +44,9 @@ class CardSwiper extends StatelessWidget {
                         'town': results[index].owner.town,
                         'state': results[index].owner.state,
                         'owner': results[index].owner.userName,
-                        'petId': petId.split("-")
+                        'petId': petId.split("-"),
+                        'stars': results[index].stars,
+                        'encounters': results[index].meetingsNumber
                       });
                     },
                     child: FadeInImage(               

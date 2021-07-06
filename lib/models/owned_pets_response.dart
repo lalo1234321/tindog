@@ -29,6 +29,9 @@ class OwnedPet {
         this.breed,
         this.vaccines,
         this.isDeleted,
+        this.stars,
+        this.meetingsNumber,
+        this.previousMeetings,
         this.id,
         this.username,
         this.name,
@@ -48,17 +51,20 @@ class OwnedPet {
     String breed;
     List<String> vaccines;
     bool isDeleted;
+    int stars;
+    int meetingsNumber;
+    List<dynamic> previousMeetings;
     String id;
     String username;
     String name;
     int age;
     String specie;
-    Gender gender;
+    String gender;
     String profileImagePhysicalPath;
     String medicalCertificateImagePhysicalPath;
     String profileImageUri;
     String medicalCertificateImageUri;
-    Owner owner;
+    String owner;
     DateTime createdAt;
     DateTime updatedAt;
     int v;
@@ -67,17 +73,20 @@ class OwnedPet {
         breed: json["breed"],
         vaccines: List<String>.from(json["vaccines"].map((x) => x)),
         isDeleted: json["isDeleted"],
+        stars: json["stars"],
+        meetingsNumber: json["meetingsNumber"],
+        previousMeetings: List<dynamic>.from(json["previousMeetings"].map((x) => x)),
         id: json["_id"],
         username: json["username"],
         name: json["name"],
         age: json["age"],
         specie: json["specie"],
-        gender: genderValues.map[json["gender"]],
+        gender: json["gender"],
         profileImagePhysicalPath: json["profileImagePhysicalPath"],
         medicalCertificateImagePhysicalPath: json["medicalCertificateImagePhysicalPath"],
         profileImageUri: json["profileImageURI"],
         medicalCertificateImageUri: json["medicalCertificateImageURI"],
-        owner: ownerValues.map[json["owner"]],
+        owner: json["owner"],
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         v: json["__v"],
@@ -87,46 +96,22 @@ class OwnedPet {
         "breed": breed,
         "vaccines": List<dynamic>.from(vaccines.map((x) => x)),
         "isDeleted": isDeleted,
+        "stars": stars,
+        "meetingsNumber": meetingsNumber,
+        "previousMeetings": List<dynamic>.from(previousMeetings.map((x) => x)),
         "_id": id,
         "username": username,
         "name": name,
         "age": age,
         "specie": specie,
-        "gender": genderValues.reverse[gender],
+        "gender": gender,
         "profileImagePhysicalPath": profileImagePhysicalPath,
         "medicalCertificateImagePhysicalPath": medicalCertificateImagePhysicalPath,
         "profileImageURI": profileImageUri,
         "medicalCertificateImageURI": medicalCertificateImageUri,
-        "owner": ownerValues.reverse[owner],
+        "owner": owner,
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
         "__v": v,
     };
-}
-
-enum Gender { F, M }
-
-final genderValues = EnumValues({
-    "F": Gender.F,
-    "M": Gender.M
-});
-
-enum Owner { THE_60_C517_AA852_A9152_E4719274 }
-
-final ownerValues = EnumValues({
-    "60c517aa852a9152e4719274": Owner.THE_60_C517_AA852_A9152_E4719274
-});
-
-class EnumValues<T> {
-    Map<String, T> map;
-    Map<T, String> reverseMap;
-
-    EnumValues(this.map);
-
-    Map<T, String> get reverse {
-        if (reverseMap == null) {
-            reverseMap = map.map((k, v) => new MapEntry(v, k));
-        }
-        return reverseMap;
-    }
 }
