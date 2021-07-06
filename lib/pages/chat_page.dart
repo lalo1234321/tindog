@@ -72,17 +72,81 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Center(
-          child: Column(
-            children: <Widget>[
-              CircleAvatar(
-                // child: Text('SM', style: TextStyle(fontSize: 12)),
-                backgroundImage: NetworkImage(arguments['profileImage']),
-                maxRadius: 15,
-              ),
-              Text(arguments['petUserName'],style: TextStyle(color: Colors.black, fontSize: 12),)
-            ],
+        title: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 110),
+              child: Column(
+              children: <Widget>[
+                CircleAvatar(
+                  // child: Text('SM', style: TextStyle(fontSize: 12)),
+                  backgroundImage: NetworkImage(arguments['profileImage']),
+                  maxRadius: 15,
+                ),
+                Text(arguments['petUserName'],style: TextStyle(color: Colors.black, fontSize: 12),),
+              ],
           ),
+            ),
+          
+          Container(
+            padding: EdgeInsets.only(left: 30),
+            child: RaisedButton(
+                    onPressed: (){
+                      print('Mostrando certificado médico');
+                      
+                    },
+                    shape:  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(80.0),
+                    ),
+                    child: Ink(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [Colors.blue,Colors.blue]
+                        ),
+                        borderRadius: BorderRadius.circular(80.0),
+                      ),
+                      child: Container(
+                        constraints: BoxConstraints(maxWidth: 100.0,maxHeight: 30.0,),
+                        alignment: Alignment.center,
+                        child: Row(
+                          children: [
+                            Text(
+                              "  Encuentro ✓",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10.0,
+                                  letterSpacing: 2.0,
+                                  fontWeight: FontWeight.w300
+                              ),
+                            ),
+                            // Icon(Icons.mark_chat_read,color: Colors.white,)
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+            // child: Container(
+            //   padding: EdgeInsets.only(left: 150),
+            //   child: Column(
+            //     children: [
+            //       SizedBox(height: 5,),
+            //       Icon(Icons.pets,color: Colors.blue,),
+            //       SizedBox(height: 4,),
+            //       Text(
+            //         'Confirmar encuentro',
+            //         style: TextStyle(
+            //           color: Colors.black,
+            //           fontSize: 12
+            //         ),
+            //       )
+            //     ],
+            //   )
+            // ),
+          )
+        ]
         ),
         centerTitle: true,
         elevation: 1,
