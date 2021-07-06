@@ -455,5 +455,40 @@ class UserService with ChangeNotifier{
 
 
   }
+  
+
+  Future<String> petValoration( double valoration, String petUserName ) async{
+    try {
+      String token = await AuthService.getToken();
+      String petId = await AuthService.getPetId();
+      Map<String, String> headers = { 
+        'Content-Type': 'application/json; charset=UTF-8',
+        'token': token
+      };
+      final response = await http.post('http://${Env.ip}:${Env.port}/pet/valoration',
+        headers: headers,
+        body: jsonEncode({
+          'petId': petId,
+          'username': petUserName,
+          'stars': valoration
+        })
+      );
+      final respBody = jsonDecode(response.body);
+      print(respBody["message"]);
+    if(response.statusCode == 200 ) {
+      
+       
+      
+
+      return respBody["message"];
+    } else {
+      
+      return respBody["message"];
+      
+    }
+    }catch(e) {
+      return 'Error en el servidor';
+    }
+  }
 
 }

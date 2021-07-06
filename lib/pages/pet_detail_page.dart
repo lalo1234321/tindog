@@ -21,7 +21,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
     final arguments = ModalRoute.of(context).settings.arguments as Map;
     String result = arguments['imageprofile'].replaceAll("localhost", Env.ip);
     String result1 = arguments['certificate'].replaceAll("localhost", Env.ip);
-    int stars = arguments['stars'];
+    double stars = arguments['stars'];
     int meetings = arguments['encounters'];
     
     if(stars == 0 && meetings == 0) {

@@ -59,9 +59,9 @@ class Match {
     String breed;
     List<String> vaccines;
     bool isDeleted;
-    int stars;
+    double stars;
     int meetingsNumber;
-    List<dynamic> previousMeetings;
+    List<String> previousMeetings;
     String id;
     String username;
     String name;
@@ -81,9 +81,9 @@ class Match {
         breed: json["breed"],
         vaccines: List<String>.from(json["vaccines"].map((x) => x)),
         isDeleted: json["isDeleted"],
-        stars: json["stars"],
+        stars: json["stars"].toDouble(),
         meetingsNumber: json["meetingsNumber"],
-        previousMeetings: List<dynamic>.from(json["previousMeetings"].map((x) => x)),
+        previousMeetings: List<String>.from(json["previousMeetings"].map((x) => x)),
         id: json["_id"],
         username: json["username"],
         name: json["name"],

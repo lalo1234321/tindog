@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:tindog/models/retrieve_message_response.dart';
 import 'package:tindog/services/auth_service.dart';
@@ -21,6 +22,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   bool _estaEscribiendo = false;
   List<ChatMessage> _messages = [];
   String petUserNameTo;
+  double ratingGlobal = 3;
   @override
   void initState() { 
     super.initState();
@@ -93,7 +95,14 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
             child: RaisedButton(
                     onPressed: (){
                       print('Mostrando certificado médico');
-                      
+                      _showAlert(context, 'Califica tu experiencia', 'hola', () async{
+                        print('Accepting rating: $ratingGlobal');
+                        String algo = await userService.petValoration(ratingGlobal, petUserNameTo);
+                        Navigator.of(context).pop();
+                        _showAlertConfirmation(context, 'Mensaje',algo, () {
+                          Navigator.pushNamed(context, 'match');
+                        });
+                      });
                     },
                     shape:  RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(80.0),
@@ -279,6 +288,60 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     // se vuelva a conectar
     // this.socketService.socket.off(event)
     super.dispose();
+  }
+  void _showAlert( BuildContext context, String title, String subtitle, Function accept) {
+    showDialog(
+      context: context,
+      builder: (buildcontext) {
+        return Column(
+          children: [
+            SizedBox(height: 130,),
+            AlertDialog(
+              title: Text(title),
+              content: RatingBar.builder(
+              initialRating: 3,
+              minRating: 1,
+              direction: Axis.horizontal,
+              allowHalfRating: true,
+              itemCount: 5,
+              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+              itemBuilder: (context, _) => Icon(
+                Icons.star,
+                color: Colors.amber,
+              ),
+              onRatingUpdate: (rating) {
+                ratingGlobal = rating;
+                print(rating);
+                print('rating backend: $ratingGlobal ');
+              },
+            ),
+              actions: <Widget>[
+                TextButton(
+                child: Text("Aceptar"),
+                onPressed: accept),
+              ],
+            ),
+          ],
+        );
+      }
+    );
+  }
+
+  void _showAlertConfirmation( BuildContext context, String title, String subtitle, Function accept) {
+    showDialog(
+      context: context,
+      builder: (buildcontext) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(subtitle),
+          actions: <Widget>[
+            TextButton(
+            child: Text("Aceptar"),
+            onPressed: accept),
+          ],
+        );
+      }
+    );
   }
 
 }

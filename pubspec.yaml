@@ -41,7 +41,7 @@ dependencies:
   google_maps_flutter: ^0.5.25
   geolocator: ^5.3.0
   url_launcher: ^5.4.2
-  flutter_rating_bar: ^3.0.1+1
+  flutter_rating_bar: ^4.0.0
   advance_pdf_viewer: any
   flutter_pdfview: ^1.0.4
   dart_random_choice: ^0.0.2
