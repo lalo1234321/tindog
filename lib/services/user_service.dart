@@ -429,7 +429,7 @@ class UserService with ChangeNotifier{
     var url = 'http://${Env.ip}:${Env.port}/pet/update/medicalCertificate/$petId';
     var request = http.MultipartRequest('PUT', Uri.parse(url));
     request.headers.addAll(headers);
-    var medical = await http.MultipartFile.fromPath("profilePic", medicalCertificateImage.path,contentType: MediaType('image','jpg'));
+    var medical = await http.MultipartFile.fromPath("certificate", medicalCertificateImage.path,contentType: MediaType('image','jpg'));
     // var certificate = await http.MultipartFile.fromPath("medicalCertificateImage", certificateImage.path,contentType: MediaType('image','jpg'));
     request.files.add(medical);
     // request.files.add(certificate);

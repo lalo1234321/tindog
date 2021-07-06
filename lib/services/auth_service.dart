@@ -1,4 +1,5 @@
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:io';
@@ -10,6 +11,7 @@ import 'package:tindog/models/owned_pets_response.dart';
 import 'package:tindog/models/register_response.dart';
 
 class AuthService with ChangeNotifier {
+  DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   final _storage = new FlutterSecureStorage();
   bool _autenticando = false;
   String petName; 
@@ -136,6 +138,8 @@ class AuthService with ChangeNotifier {
     return await _storage.write(key: 'token', value: token);
   }
   Future logout() async{
+    AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
+    print('My device info ${androidInfo.model}');
     await _storage.delete(key: 'token');
     await _storage.delete(key:'petName');
     await _storage.delete(key:'petId');

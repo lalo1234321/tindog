@@ -235,19 +235,23 @@ class _PetSettingsPageState extends State<PetSettingsPage> {
         padding: EdgeInsets.all(20),
         child: GestureDetector(
           onTap: () {
-            _getFromGallery();
+            _getFromGallery2();
             // print(imageFile.path);
             _picked = true;
           },
           child: CircleAvatar(
-            backgroundImage:(_picked) ? FileImage(File(imageFile.path))
+            backgroundImage:(_picked) ? FileImage(File(imageFile2.path))
             : NetworkImage('https://extyseg.com/wp-content/uploads/2019/04/EXTYSEG-imagen-no-disponible.jpg'),
             radius: 70,
           ),
         ),
       ),
-      BtnAzul(texto: 'Guardar cambios', onPressed: () {
+      BtnAzul(texto: 'Guardar cambios', onPressed: () async{
         print('Guardando imagen de certificado médico');
+        await this.userService.updateMedicalCertificateImage(imageFile2);
+        _showAlertDialogText(context, 'Datos actualizados', 'Regresaremos a la página de perfil para reflejar sus cambios', () {
+          Navigator.pushReplacementNamed(context, 'profile');
+        });
       })
      ],
     ),
