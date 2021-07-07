@@ -46,7 +46,16 @@ class _PublicationsPageState extends State<PublicationsPage> {
               String result = sales[i].pet.profileImageUri.replaceAll("localhost", Env.ip);
               return GestureDetector(
                 onTap: () {
-                  print('Navegando con los datos ');
+                  Navigator.pushNamed(context, 'saleDetail',arguments: {
+                    'username': sales[i].pet.username,
+                    'imageprofile': sales[i].pet.profileImageUri,
+                    'certificate': sales[i].pet.medicalCertificateImageUri,
+                    'location':sales[i].location,
+                    'ownerId': sales[i].pet.owner,
+                    'stars': sales[i].pet.stars,
+                    'encounters': sales[i].pet.meetingsNumber
+                  });
+
                 },
                 child: ListTile(
                   title: Text('\$${sales[i].price}'),

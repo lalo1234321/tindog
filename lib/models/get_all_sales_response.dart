@@ -42,7 +42,7 @@ class Sale {
     String status;
     String id;
     Pet pet;
-    int price;
+    double price;
     IdSeller idSeller;
     DateTime date;
     int v;
@@ -53,7 +53,7 @@ class Sale {
         status: json["status"],
         id: json["_id"],
         pet: Pet.fromJson(json["pet"]),
-        price: json["price"],
+        price: json["price"].toDouble(),
         idSeller: IdSeller.fromJson(json["idSeller"]),
         date: DateTime.parse(json["date"]),
         v: json["__v"],
@@ -187,7 +187,7 @@ class Pet {
     String breed;
     List<String> vaccines;
     bool isDeleted;
-    int stars;
+    double stars;
     int meetingsNumber;
     List<String> previousMeetings;
     String id;
@@ -209,7 +209,7 @@ class Pet {
         breed: json["breed"],
         vaccines: List<String>.from(json["vaccines"].map((x) => x)),
         isDeleted: json["isDeleted"],
-        stars: json["stars"],
+        stars: json["stars"].toDouble(),
         meetingsNumber: json["meetingsNumber"],
         previousMeetings: List<String>.from(json["previousMeetings"].map((x) => x)),
         id: json["_id"],

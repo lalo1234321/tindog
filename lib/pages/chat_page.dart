@@ -77,7 +77,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         title: Row(
           children: [
             Container(
-              padding: EdgeInsets.only(left: 110),
+              padding: EdgeInsets.only(left: 80),
               child: Column(
               children: <Widget>[
                 CircleAvatar(
@@ -91,7 +91,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
             ),
           
           Container(
-            padding: EdgeInsets.only(left: 30),
+            padding: EdgeInsets.only(left: 10),
             child: RaisedButton(
                     onPressed: (){
                       print('Mostrando certificado médico');

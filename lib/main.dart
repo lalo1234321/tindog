@@ -15,6 +15,7 @@ import 'package:tindog/pages/market_place.dart';
 import 'package:tindog/pages/match_page.dart';
 import 'package:tindog/pages/payment_page.dart';
 import 'package:tindog/pages/pet_detail_page.dart';
+import 'package:tindog/pages/pet_sale_detail_page.dart';
 import 'package:tindog/pages/pet_settings_page.dart';
 import 'package:tindog/pages/premium_page.dart';
 import 'package:tindog/pages/profile_page.dart';
@@ -72,6 +73,7 @@ class MyApp extends StatelessWidget {
           'about'       : ( BuildContext context ) => AboutPage(),
           'petSetting'  : ( BuildContext context ) => PetSettingsPage(),
           'dummy'       : ( BuildContext context ) => DummyPage(),
+          'saleDetail'  : ( BuildContext context ) => PetSaleDetailPage()
         },
       ),
     );
