@@ -8,6 +8,7 @@ import 'package:tindog/helpers/home_view.dart';
 import 'package:tindog/models/place.dart';
 import 'package:tindog/pages/about_page.dart';
 import 'package:tindog/pages/chat_page.dart';
+import 'package:tindog/pages/dummy_page.dart';
 import 'package:tindog/pages/loading_page.dart';
 import 'package:tindog/pages/login_page.dart';
 import 'package:tindog/pages/market_place.dart';
@@ -38,10 +39,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider( create: (BuildContext context ) => HomeView()),
-        ChangeNotifierProvider(create: ( BuildContext context ) => AuthService()),
-        ChangeNotifierProvider(create: ( BuildContext context ) => UserService() ),
-        ChangeNotifierProvider(create: ( BuildContext context ) => SocketService() ),
-        FutureProvider(create: (context) => locatorService.getLocation()),
+        ChangeNotifierProvider( create: ( BuildContext context ) => AuthService()),
+        ChangeNotifierProvider( create: ( BuildContext context ) => UserService() ),
+        ChangeNotifierProvider( create: ( BuildContext context ) => SocketService() ),
+        FutureProvider( create: (context) => locatorService.getLocation()),
         ProxyProvider<Position,Future<List<Place>>>( 
           update: (context,position,places){
             return (position !=null) ? placesService.getPlaces(position.latitude, position.longitude) :null;
@@ -54,22 +55,23 @@ class MyApp extends StatelessWidget {
         initialRoute: 'login',
         routes: {
           
-          'login': ( BuildContext context ) => LoginPage(),
-          'loading': ( BuildContext context ) => LoadingPage(),
-          'register' : (BuildContext context) => RegisterPage(),
-          'profile' : (BuildContext context) => ProfilePage(),
-          'chats' : (BuildContext context) => UsersPage(),
-          'match' : (BuildContext context) => MatchPage(),
-          'chat' : (BuildContext context) => ChatPage(),
-          'settings' : (BuildContext context)  => SettingsPage(),
-          'payment' : ( BuildContext context ) => PaymentPage(),
-          'premium' : ( BuildContext context ) => PremiumPage(),
-          'detail' : ( BuildContext context ) => PetDetailPage(),
-          'search' : ( BuildContext context ) => Search(),
+          'login'       : ( BuildContext context ) => LoginPage(),
+          'loading'     : ( BuildContext context ) => LoadingPage(),
+          'register'    : ( BuildContext context ) => RegisterPage(),
+          'profile'     : ( BuildContext context ) => ProfilePage(),
+          'chats'       : ( BuildContext context ) => UsersPage(),
+          'match'       : ( BuildContext context ) => MatchPage(),
+          'chat'        : ( BuildContext context ) => ChatPage(),
+          'settings'    : ( BuildContext context ) => SettingsPage(),
+          'payment'     : ( BuildContext context ) => PaymentPage(),
+          'premium'     : ( BuildContext context ) => PremiumPage(),
+          'detail'      : ( BuildContext context ) => PetDetailPage(),
+          'search'      : ( BuildContext context ) => Search(),
           'registerPet' : ( BuildContext context ) => RegisterPet(),
           'marketPlace' : ( BuildContext context ) => MarketPlace(),
-          'about' : (BuildContext context) => AboutPage(),
-          'petSetting' : (BuildContext context) => PetSettingsPage()
+          'about'       : ( BuildContext context ) => AboutPage(),
+          'petSetting'  : ( BuildContext context ) => PetSettingsPage(),
+          'dummy'       : ( BuildContext context ) => DummyPage(),
         },
       ),
     );

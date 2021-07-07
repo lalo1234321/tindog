@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:tindog/helpers/env.dart';
+import 'package:tindog/models/get_all_sales_response.dart';
 import 'package:tindog/models/notifications_response.dart';
 import 'package:tindog/models/owned_pets_response.dart';
 import 'package:tindog/models/prematch_response.dart';
@@ -489,6 +490,68 @@ class UserService with ChangeNotifier{
     }catch(e) {
       return 'Error en el servidor';
     }
+  }
+
+
+  Future<String> sellAPet( String sellUserName,String price ) async{
+    // double priceParsed = double.parse(price);
+    // if(double.parse(price).runtimeType == double) {
+    //   print('Soy un double');
+    // }
+    // else {
+    //   print('No soy un double');
+    // }
+    try {
+      // String petUserName = await AuthService.getPetUserName();
+      String token = await AuthService.getToken();
+      // String petId = await AuthService.getPetId();
+      Map<String, String> headers = { 
+        'Content-Type': 'application/json; charset=UTF-8',
+        'token': token
+      };
+      final response = await http.post('http://${Env.ip}:${Env.port}/sales/register',
+        headers: headers,
+        body: jsonEncode({
+          'price': price,
+          'username': sellUserName
+        })
+      );
+      final respBody = jsonDecode(response.body);
+      print(respBody["message"]);
+    if(response.statusCode == 200 ) {
+      
+       
+      
+
+      return respBody["message"];
+    } else {
+      
+      return respBody["message"];
+      
+    }
+    }catch(e) {
+      return 'Error en el servidor';
+    }
+  }
+
+  Future<List<Sale>> getAllSales() async{
+    try{
+      final token = await AuthService.getToken();
+      final response = await http.get('http://${Env.ip}:${Env.port}/getAllSales',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        }
+      );
+    final respBody = jsonDecode(response.body);
+
+    //print( respBody );
+    final getAllSales = getAllSalesResponseFromJson(response.body);
+    return getAllSales.sales;
+    }catch(e) {
+      return [];
+    }
+    
   }
 
 }
