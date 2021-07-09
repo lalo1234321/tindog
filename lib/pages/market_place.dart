@@ -14,6 +14,8 @@ class MarketPlace extends StatefulWidget {
 
 class _MarketPlaceState extends State<MarketPlace> {
   List<String> ages = ['Especie'];
+  List<String> breeds = ['Raza'];
+  String selectedOption2 = 'Raza';
   String selectedOption = 'Especie';
   int page = 0;
   UserService userService;
@@ -38,7 +40,10 @@ class _MarketPlaceState extends State<MarketPlace> {
     return Scaffold(
       appBar:  (page ==0 ) ? AppBar(
         actions: <Widget>[
-          _createDropDown()
+          _createDropDown2(),
+          _createDropDown(),
+          
+
         ],
       ) : AppBar(
         title:Text('Compra y venta'),
@@ -120,6 +125,17 @@ class _MarketPlaceState extends State<MarketPlace> {
     return lista;
   }
 
+   List<DropdownMenuItem<String>> getOpcionesDropdown2() {
+    List<DropdownMenuItem<String>> lista = new List();
+    breeds.forEach((element) {
+      lista.add( DropdownMenuItem(
+          child: Text(element.toString()),
+          value: element,
+      ));  
+    });
+    return lista;
+  }
+
   Widget _createDropDown() {
     return Row(
       children: [
@@ -131,10 +147,16 @@ class _MarketPlaceState extends State<MarketPlace> {
               iconEnabledColor: Colors.white,
             value: selectedOption,
             items:getOpcionesDropdown(),
-            onChanged: (opt) {
+            onChanged: (opt) async{
+              selectedOption=opt;
+              print(selectedOption);
+              List<String> extractingInfo = await this.userService.getAllBreedsBySpeciePet(selectedOption);
+              print(extractingInfo);
+              this.breeds.insertAll(0, extractingInfo);
               setState(() {
-                selectedOption=opt;
+                
               });
+              
             },
           )
   
@@ -143,6 +165,30 @@ class _MarketPlaceState extends State<MarketPlace> {
         Container(
           child: Text('Filtros'),
         )
+      ],
+    );
+}
+
+    Widget _createDropDown2() {
+    return Row(
+      children: [
+        Row(
+          children: <Widget>[
+            
+            SizedBox(width:30.0),
+            DropdownButton(
+              iconEnabledColor: Colors.white,
+            value: selectedOption2,
+            items:getOpcionesDropdown2(),
+            onChanged: (opt) {
+              setState(() {
+                selectedOption2=opt;
+              });
+            },
+          )
+  
+          ],
+        ),
       ],
     );
 }

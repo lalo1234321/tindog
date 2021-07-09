@@ -157,7 +157,7 @@ class _PetDetailPageState extends State<PetDetailPage> {
                   RaisedButton(
                     onPressed: () {
                       print('Solicitando emparejamiento');
-                      _showAlert(context, 'Todo correcto', 'Estás apunto de solicitar un emparejamiento. \nPresiona OK si deseas seguir con el proceso', () async{
+                      _showAlert(context, 'Todo correcto', 'Estás apunto de solicitar un emparejamiento. \nPresiona Aceptar si deseas seguir con el proceso', () async{
                         String petUserName = await AuthService.getPetUserName();
                       print(arguments['petId']);
                       socketService.emit('notify',{

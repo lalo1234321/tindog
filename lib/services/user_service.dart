@@ -628,4 +628,26 @@ class UserService with ChangeNotifier{
     }
   }
 
+  Future<List<String>> getAllBreedsBySpeciePet( String specie ) async{
+    String token = await AuthService.getToken();
+    try{
+      
+      final response = await http.post('http://${Env.ip}:${Env.port}/getAllBreedsBySpeciePet',
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token
+          },
+          body: jsonEncode({
+            'specie': specie
+          })
+      );
+      print(response.body);
+      final getAllBreedsResponse = getAllSpeciesResponseFromJson(response.body);
+      return getAllBreedsResponse;
+
+    }catch(e) {
+      return [];
+    }
+  }
+
 }

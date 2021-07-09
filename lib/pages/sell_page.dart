@@ -287,51 +287,71 @@ class _SellPageState extends State<SellPage> {
     showDialog(
       context: context,
       builder: (buildcontext) {
-        return AlertDialog(
-          title: Text('Editando'),
-          content: TextField(
-                    keyboardType: TextInputType.number,
-                    style: TextStyle(
-                      
-                      color: Colors.blue
-                    ),
-                    decoration: InputDecoration(
-                      
-                      hintText: 'Ingrese cantidad',
-                      prefixIcon: Icon(
-                        Icons.monetization_on,
-                        size:18,
-                        color: Colors.blue
-                      ),
-                      enabledBorder: UnderlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.blue)
-                      ),
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          print('Yeah');
-                        },
-                        child: Icon(
-                          Icons.keyboard_arrow_right,
-                          size: 18,
-                          color: Colors.blue,
-                        ),
-                      ),
-                      labelStyle: TextStyle(color: Colors.white)
-                      ),
-          
-                      obscureText: false,
-                      controller: this.priceCtl,
-                    ),
-          actions: <Widget>[
-            TextButton(
-            child: Text("Aceptar"),
-            onPressed: accept),
-          ],
+        return Container(
+          margin: EdgeInsets.only(top:100, bottom: 200),
+          child: AlertDialog(
+            
+            title: Text('Editando'),
+            content: SingleChildScrollView(
+              child: Column(
+                
+                children: [
+                  TextField(
+                            keyboardType: TextInputType.number,
+                            style: TextStyle(
+                              
+                              color: Colors.blue
+                            ),
+                            decoration: InputDecoration(
+                              
+                              hintText: 'Ingrese cantidad',
+                              prefixIcon: Icon(
+                                Icons.monetization_on,
+                                size:18,
+                                color: Colors.blue
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide.none
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(color: Colors.blue)
+                              ),
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  print('Yeah');
+                                },
+                                child: Icon(
+                                  Icons.keyboard_arrow_right,
+                                  size: 18,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                              labelStyle: TextStyle(color: Colors.white)
+                              ),
+                  
+                              obscureText: false,
+                              controller: this.priceCtl,
+                            ),
+                            SizedBox(height: 40,),
+                            BtnAzul(texto: 'Eliminar publicación', onPressed: () {
+                              _showAlertDialogText(context, 'Información', 'Hola mundo', () {
+                                Navigator.of(context).pop();
+                                
+                              });
+                              print('Eliminando publicación');
+                            })
+                ],
+                
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+              child: Text("Aceptar"),
+              onPressed: accept),
+            ],
+          ),
         );
         
       }
