@@ -16,12 +16,14 @@ class SellPage extends StatefulWidget {
 }
 
 class _SellPageState extends State<SellPage> {
+  String selectedUserName = '';
   Text hintText = Text('Ingrese la cantidad', style: TextStyle(color: Colors.blue),);
   String userNameSelected = '';
   TextEditingController priceCtl = TextEditingController();
-  
+  UserService userService;
   @override
   Widget build(BuildContext context) {
+    this.userService = Provider.of<UserService>(context, listen: false);
     final authService = Provider.of<AuthService>(context);
     priceCtl.text = '';
     return Stack(
@@ -154,7 +156,7 @@ class _SellPageState extends State<SellPage> {
                     
                     print('presionaste ${ownedPets[i].username}');
                     print('precio : ${priceCtl.text}');
-                    
+                    this.selectedUserName = ownedPets[i].username;
                       _showAlertDialog(context, () async{
                       if(priceCtl.text == '') {
                       _showAlertDialogText(context, 'Error', 'Profavor ingrese una cantidad para vender', (){
@@ -335,12 +337,13 @@ class _SellPageState extends State<SellPage> {
                               controller: this.priceCtl,
                             ),
                             SizedBox(height: 40,),
-                            BtnAzul(texto: 'Eliminar publicación', onPressed: () {
-                              _showAlertDialogText(context, 'Información', 'Hola mundo', () {
+                            BtnAzul(texto: 'Eliminar publicación', onPressed: () async{
+                              String message = await this.userService.deletePublication(this.selectedUserName);
+                              _showAlertDialogText(context, 'Información', message, () {
                                 Navigator.of(context).pop();
                                 
                               });
-                              print('Eliminando publicación');
+                              print('Eliminando publicación $selectedUserName');
                             })
                 ],
                 

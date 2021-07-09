@@ -649,5 +649,49 @@ class UserService with ChangeNotifier{
       return [];
     }
   }
+  Future<String> deletePublication(String userName) async{
+    String token = await AuthService.getToken();
+    try {
+      final response = await http.put('http://${Env.ip}:${Env.port}/deleteSales',
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token
+          },
+          body: jsonEncode({
+            'username': userName
+          })
+      );
+      final respBody = jsonDecode(response.body);
+      return respBody["message"];
+    } catch(e) {
+      return 'Error en el servidor';
+    }
 
+
+
+  }
+  Future<List<Sale>> getAllSalesByBreedAndSpecie(String breed, String specie) async{
+    try{
+      final token = await AuthService.getToken();
+      final response = await http.put('http://${Env.ip}:${Env.port}/getAllSalesByBreedsAndSpeciePet',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        body:jsonEncode({
+          'specie': specie,
+          'breed': breed
+        })
+      );
+    final respBody = jsonDecode(response.body);
+    print(response.body);
+    //print( respBody );
+    final getAllSales = getAllSalesResponseFromJson(response.body);
+    return getAllSales.sales;
+    }catch(e) {
+      print(e);
+      return [];
+    }
+    
+  }
 }

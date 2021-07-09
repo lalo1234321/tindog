@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tindog/helpers/env.dart';
+import 'package:tindog/models/get_all_sales_response.dart';
 import 'package:tindog/pages/chats_market_page.dart';
 import 'package:tindog/pages/publications_page.dart';
 import 'package:tindog/pages/sell_page.dart';
@@ -23,9 +25,11 @@ class _MarketPlaceState extends State<MarketPlace> {
   void initState() { 
     super.initState();
     this.userService = Provider.of<UserService>(context, listen: false);
+    // breeds.removeRange(0, breeds.length);
     loadingSpecies();
   }
   void loadingSpecies() async{
+    
     List<String> speciesInApp = await this.userService.getAllSpecies();
     if(mounted) {
       setState(() {
@@ -36,7 +40,9 @@ class _MarketPlaceState extends State<MarketPlace> {
   @override
   Widget build(BuildContext context) {
     print('El id de la sesión actual es ${AuthService.user.id}');
-
+    // if( page == 0 ) {
+      
+    // }
     return Scaffold(
       appBar:  (page ==0 ) ? AppBar(
         actions: <Widget>[
@@ -73,6 +79,7 @@ class _MarketPlaceState extends State<MarketPlace> {
           // Navigator.pushNamed(context, 'chats');
         },
         items: [
+          
           BottomNavigationBarItem(
             icon: Icon(Icons.pets_outlined,size: 30.0,),
             label: 'Comprar Mascotas',
@@ -84,6 +91,10 @@ class _MarketPlaceState extends State<MarketPlace> {
           BottomNavigationBarItem(
             icon: Icon(Icons.chat,size: 30.0,),
             label: 'Chatear',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.search,size: 30.0,),
+            label: 'Ventas por filtro',
           ),
         ],
       ),
@@ -110,12 +121,18 @@ class _MarketPlaceState extends State<MarketPlace> {
       case 2: {
         return ChatsMarketPage();
       }
+      case 3: {
+        return Container(
+          child: _listViewSales(),
+        );
+      }
       break;
     }
   }
 
   List<DropdownMenuItem<String>> getOpcionesDropdown() {
     List<DropdownMenuItem<String>> lista = new List();
+      
     ages.forEach((element) {
       lista.add( DropdownMenuItem(
           child: Text(element.toString()),
@@ -150,6 +167,11 @@ class _MarketPlaceState extends State<MarketPlace> {
             onChanged: (opt) async{
               selectedOption=opt;
               print(selectedOption);
+              setState(() {
+                this.breeds = ['Raza'];
+                selectedOption2 = 'Raza';
+                // selectedOption = 'Especie';
+              });
               List<String> extractingInfo = await this.userService.getAllBreedsBySpeciePet(selectedOption);
               print(extractingInfo);
               this.breeds.insertAll(0, extractingInfo);
@@ -183,6 +205,9 @@ class _MarketPlaceState extends State<MarketPlace> {
             onChanged: (opt) {
               setState(() {
                 selectedOption2=opt;
+                if(selectedOption2 != 'Raza') {
+                  this.page = 3;
+                }
               });
             },
           )
@@ -192,5 +217,98 @@ class _MarketPlaceState extends State<MarketPlace> {
       ],
     );
 }
+
+  Widget _listViewSales( ) {
+    final userService = Provider.of<UserService>(context);
+    // final authService = Provider.of<AuthService>(context);
+    // final socketService = Provider.of<SocketService>(context, listen: false);
+
+    
+    return FutureBuilder(
+      future: userService.getAllSalesByBreedAndSpecie(this.selectedOption2,this.selectedOption),
+      builder: ( BuildContext context, AsyncSnapshot<dynamic> snapshot ) {
+        if(snapshot.hasData) {
+          List<Sale> sales = snapshot.data;
+          // String result = snapshot.data[0].profileImageUri.replaceAll("localhost", "192.168.100.6");
+          
+        return (sales.length == 0) ? Center(
+                  child: Text('Sin resultados'),
+                
+          ) :
+           ListView.builder(
+            itemCount:  sales.length,
+            itemBuilder: (BuildContext context, int i) {
+              String result = sales[i].pet.profileImageUri.replaceAll("localhost", Env.ip);
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, 'saleDetail',arguments: {
+                    'username': sales[i].pet.username,
+                    'imageprofile': sales[i].pet.profileImageUri,
+                    'certificate': sales[i].pet.medicalCertificateImageUri,
+                    'location':sales[i].location,
+                    'ownerId': sales[i].pet.owner,
+                    'stars': sales[i].pet.stars,
+                    'encounters': sales[i].pet.meetingsNumber,
+                    'price': sales[i].price
+                  });
+
+                },
+                child: ListTile(
+                  focusColor: Colors.blue[100],
+                  title: Text('\$${sales[i].price}'),
+                  subtitle: Text('${sales[i].pet.username}    Vendedor: ${sales[i].idSeller.userName} \nEspecie: ${sales[i].pet.specie}      Raza: ${sales[i].pet.breed}'),
+                  trailing: CircleAvatar(
+                    backgroundImage: NetworkImage('http://'+result),
+                  ),
+                ),
+              );
+            }
+          );
+        } else {
+          return CircularProgressIndicator();
+        }
+
+           
+        }    
+        );   
+    //     ListView.builder(
+    //     itemCount: ownedPets.length,
+    //     itemBuilder: (BuildContext context, int i) {
+    //       String result = ownedPets[i].profileImageUri.replaceAll("localhost", Env.ip);
+    //       final authService = Provider.of<AuthService>(context);
+    //       return Padding(
+    //         padding: EdgeInsets.only(right: 20, left: 20,top: 370),
+    //         child: Column(
+    //           children: [
+    //             GestureDetector(
+    //               onTap: () async{
+    //                 await authService.savePetName(ownedPets[i].name);
+    //                 await authService.savePetId(ownedPets[i].id);
+    //                 await authService.savePetUserName(ownedPets[i].username);
+    //                 socketService.connect();
+    //                 Navigator.pushNamed(context, 'match');
+    //               },
+    //               child: CircleAvatar(
+    //                 radius: 65,
+    //                 backgroundImage: NetworkImage('http://'+result),
+                    
+    //               ),
+    //             ),
+    //             SizedBox(height: 10,),
+    //             Text(
+    //               ownedPets[i].username,
+    //               style: TextStyle(
+    //                 color: Colors.white,
+    //                 fontSize: 20 
+    //               ),
+    //             )
+    //           ],
+    //         ),
+    //       );
+    //   },
+    //   scrollDirection: Axis.horizontal,
+      
+    // );
+  }
 
 }

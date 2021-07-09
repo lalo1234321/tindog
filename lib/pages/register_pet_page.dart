@@ -128,7 +128,7 @@ enum SingingCharacter { macho, hembra }
         },
         child: CircleAvatar(
           backgroundImage:(_picked) ? FileImage(File(imageFile.path))
-          : NetworkImage('https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1200px-No-Image-Placeholder.svg.png'),
+          : NetworkImage('https://extyseg.com/wp-content/uploads/2019/04/EXTYSEG-imagen-no-disponible.jpg'),
           radius: 70,
         ),
       ),
