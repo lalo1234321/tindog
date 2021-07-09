@@ -61,7 +61,7 @@ class _PublicationsPageState extends State<PublicationsPage> {
                 child: ListTile(
                   focusColor: Colors.blue[100],
                   title: Text('\$${sales[i].price}'),
-                  subtitle: Text('${sales[i].pet.username}  \nEspecie: ${sales[i].pet.specie}      Raza: ${sales[i].pet.breed}'),
+                  subtitle: Text('${sales[i].pet.username}    Vendedor: ${sales[i].idSeller.userName} \nEspecie: ${sales[i].pet.specie}      Raza: ${sales[i].pet.breed}'),
                   trailing: CircleAvatar(
                     backgroundImage: NetworkImage('http://'+result),
                   ),
