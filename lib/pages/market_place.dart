@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tindog/pages/chats_market_page.dart';
 import 'package:tindog/pages/publications_page.dart';
 import 'package:tindog/pages/sell_page.dart';
 import 'package:tindog/services/auth_service.dart';
+import 'package:tindog/services/user_service.dart';
 
 
 class MarketPlace extends StatefulWidget {
@@ -11,14 +13,35 @@ class MarketPlace extends StatefulWidget {
 }
 
 class _MarketPlaceState extends State<MarketPlace> {
+  List<String> ages = ['Especie'];
+  String selectedOption = 'Especie';
   int page = 0;
+  UserService userService;
+  @override
+  void initState() { 
+    super.initState();
+    this.userService = Provider.of<UserService>(context, listen: false);
+    loadingSpecies();
+  }
+  void loadingSpecies() async{
+    List<String> speciesInApp = await this.userService.getAllSpecies();
+    if(mounted) {
+      setState(() {
+        ages.insertAll(0, speciesInApp);
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     print('El id de la sesión actual es ${AuthService.user.id}');
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Compra y venta'),
+      appBar:  (page ==0 ) ? AppBar(
+        actions: <Widget>[
+          _createDropDown()
+        ],
+      ) : AppBar(
+        title:Text('Compra y venta'),
       ),
       body: Center(
         child: _selectPage()
@@ -85,4 +108,43 @@ class _MarketPlaceState extends State<MarketPlace> {
       break;
     }
   }
+
+  List<DropdownMenuItem<String>> getOpcionesDropdown() {
+    List<DropdownMenuItem<String>> lista = new List();
+    ages.forEach((element) {
+      lista.add( DropdownMenuItem(
+          child: Text(element.toString()),
+          value: element,
+      ));  
+    });
+    return lista;
+  }
+
+  Widget _createDropDown() {
+    return Row(
+      children: [
+        Row(
+          children: <Widget>[
+            
+            SizedBox(width:30.0),
+            DropdownButton(
+              iconEnabledColor: Colors.white,
+            value: selectedOption,
+            items:getOpcionesDropdown(),
+            onChanged: (opt) {
+              setState(() {
+                selectedOption=opt;
+              });
+            },
+          )
+  
+          ],
+        ),
+        Container(
+          child: Text('Filtros'),
+        )
+      ],
+    );
+}
+
 }

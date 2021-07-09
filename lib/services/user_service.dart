@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:tindog/helpers/env.dart';
 import 'package:tindog/models/get_all_my_chats_for_sale_response.dart';
 import 'package:tindog/models/get_all_sales_response.dart';
+import 'package:tindog/models/get_all_species.dart';
 import 'package:tindog/models/notifications_response.dart';
 import 'package:tindog/models/owned_pets_response.dart';
 import 'package:tindog/models/prematch_response.dart';
@@ -605,6 +606,22 @@ class UserService with ChangeNotifier{
       final getAllMyChats = getAllMyChatsForSaleResponseFromJson(response.body);
       return getAllMyChats.chats;
 
+    } catch(e) {
+      print(e);
+      return [];
+    }
+  }
+
+  Future <List<String>> getAllSpecies() async{
+    String token = await AuthService.getToken();
+    try {
+      final response = await http.get('http://${Env.ip}:${Env.port}/getAllSpeciesPet',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token
+      });
+      final getAllSpeciesResponse = getAllSpeciesResponseFromJson(response.body);
+      return getAllSpeciesResponse;
     } catch(e) {
       print(e);
       return [];
