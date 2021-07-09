@@ -70,7 +70,7 @@ class _SettingsPageState extends State<SettingsPage> {
               //     trailing: Icon(Icons.edit, color: Colors.white,),
               //   ),
               // ),
-              SizedBox(height: 30,),
+              SizedBox(height: 10,),
               Card(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
                 child: Column(
@@ -184,7 +184,17 @@ class _SettingsPageState extends State<SettingsPage> {
                         trailing: Icon(Icons.keyboard_arrow_right, color: Colors.white,),
                       ),
                     ),
-                    
+                    ListTile(
+                      leading: Icon(Icons.place, color: Colors.blue,),
+                      title: Text('Última conexión'),
+                      trailing: Icon(Icons.keyboard_arrow_right, color: Colors.blue,),
+                      onTap: () async{
+                        String message = await authService.getInformationConection();
+                        _showAlertDialogText(context, 'Información', message, () {
+                          Navigator.of(context).pop();
+                        });
+                      },
+                    ),
                     ListTile(
                       leading: Icon(Icons.exit_to_app, color: Colors.blue,),
                       title: Text('Cerrar sesión'),
@@ -196,7 +206,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         // socketService.disconnect();
                         await authService.logout();
                         await socketService.disconnect();
-                        Navigator.pushReplacementNamed(context, 'login');
+                        Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+                        // Navigator.pushReplacementNamed(context, 'login');
                         // AuthService.deleteToken();
                         //  en este punto ya se borró el token y cuand0 reiniciemos la app la loading page nos
                         // redirigirá al login page
@@ -215,11 +226,14 @@ class _SettingsPageState extends State<SettingsPage> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
+                      onTap: () async{
                         _showAlertDialogText(context,'Importante','¿Está seguro que quiere eliminar a esta mascota?\n\nUna vez eliminada esta mascota no podrá usarla para interactuar',() async{
                           await userService.deletePet();
-                          Navigator.pushReplacementNamed(context, 'login');
+                          // Navigator.pushReplacementNamed(context, 'login');
+                          Navigator.of(context).pop();
+                          Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
                         });
+                        
                       },
                       child: ListTile(
                           leading: Icon(Icons.delete, color: Colors.blue,),
@@ -231,7 +245,9 @@ class _SettingsPageState extends State<SettingsPage> {
                       onTap: () async{
                         _showAlertDialogText(context,'Importante','¿Está seguro que quiere eliminar su cuenta?\n \nTenga en cuenta que una vez eliminada ya no podrá acceder con ésta',() async{
                           await userService.deleteUser();
-                          Navigator.pushReplacementNamed(context, 'login');
+                          Navigator.of(context).pop();
+                          // Navigator.pushReplacementNamed(context, 'login');
+                          Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
                         });
                         
                       },

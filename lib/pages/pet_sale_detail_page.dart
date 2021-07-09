@@ -5,6 +5,7 @@ import 'package:tindog/services/auth_service.dart';
 import 'package:tindog/services/notification_service.dart';
 import 'package:tindog/services/socket_service.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:tindog/services/user_service.dart';
 
 
 
@@ -17,12 +18,14 @@ class _PetSaleDetailPageState extends State<PetSaleDetailPage> {
   double visualStars;
   @override
   Widget build(BuildContext context) {
+    final userService = Provider.of<UserService>(context,listen: false);
     final socketService = Provider.of<SocketService>(context, listen: false);
     final arguments = ModalRoute.of(context).settings.arguments as Map;
     String result = arguments['imageprofile'].replaceAll("localhost", Env.ip);
     String result1 = arguments['certificate'].replaceAll("localhost", Env.ip);
     double stars = arguments['stars'];
     int meetings = arguments['encounters'];
+    String idSeller = arguments['ownerId'];
     
     if(stars == 0 && meetings == 0) {
       visualStars = 0;
@@ -85,7 +88,7 @@ class _PetSaleDetailPageState extends State<PetSaleDetailPage> {
                 height: 10,
               ),
               Text(
-                "Dueño: ${arguments['owner']}"
+                "Precio: \$${arguments['price']}"
                 ,style: TextStyle(
                   fontSize: 15.0,
                   color:Colors.black45,
@@ -155,16 +158,17 @@ class _PetSaleDetailPageState extends State<PetSaleDetailPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   RaisedButton(
-                    onPressed: () {
-                      print('Solicitando emparejamiento');
-                      _showAlert(context, 'Todo correcto', 'Estás apunto de solicitar un emparejamiento. \nPresiona OK si deseas seguir con el proceso', () async{
-                        String petUserName = await AuthService.getPetUserName();
-                      print(arguments['petId']);
-                      socketService.emit('notify',{
-                        'from': petUserName,
-                        'to': arguments['username']
-                      });
-                      Navigator.of(context).pop();
+                    onPressed: () async{
+                      String message = await userService.createChatForSale( idSeller );
+                      print('Estas apunto de hablar con un vendedor');
+                      _showAlert(context, 'Información', message, () {
+                      //   String petUserName = await AuthService.getPetUserName();
+                      // print(arguments['petId']);
+                      // socketService.emit('notify',{
+                      //   'from': petUserName,
+                      //   'to': arguments['username']
+                      // });
+                        Navigator.of(context).pop();
                       });
                       
                       // notificationService.petTo.id = arguments['id'];
@@ -182,10 +186,10 @@ class _PetSaleDetailPageState extends State<PetSaleDetailPage> {
                         borderRadius: BorderRadius.circular(30.0),
                       ),
                       child: Container(
-                        constraints: BoxConstraints(maxWidth: 100.0,maxHeight: 40.0,),
+                        constraints: BoxConstraints(maxWidth: 180.0,maxHeight: 40.0,),
                         alignment: Alignment.center,
                         child: Text(
-                          "Emparejar",
+                          "Hablar con el vendedor",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 12.0,

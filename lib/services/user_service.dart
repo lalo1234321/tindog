@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:tindog/helpers/env.dart';
+import 'package:tindog/models/get_all_my_chats_for_sale_response.dart';
 import 'package:tindog/models/get_all_sales_response.dart';
 import 'package:tindog/models/notifications_response.dart';
 import 'package:tindog/models/owned_pets_response.dart';
@@ -145,6 +146,20 @@ class UserService with ChangeNotifier{
         print(e);
       }
       
+    }
+    Future<List> retrieveMessageSale ( String idTo ) async{
+      try{
+        // final petUserName =  await AuthService.getPetUserName();
+        String myId = AuthService.user.id;
+        final response = await http.get('http://${Env.ip}:${Env.port}/pet/messages/$myId/$idTo');
+
+        final responseBody = jsonDecode(response.body);
+        print(responseBody);
+        final retrieveMessageResponse = retrieveMessageResponseFromJson( response.body );
+        return retrieveMessageResponse.last30;
+      } catch( e ) {
+        return [];
+      }
     }
     Future<List> retrieveMessage ( String otherPetUserName ) async{
       try{
@@ -552,6 +567,48 @@ class UserService with ChangeNotifier{
       return [];
     }
     
+  }
+
+
+  Future<String> createChatForSale( String idSeller ) async{
+    String token = await AuthService.getToken();
+    try{
+      final response = await http.post('http://${Env.ip}:${Env.port}/chat/topic/register',
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token
+          },
+          body: jsonEncode({
+            'idVendedor': idSeller
+          })
+      );
+      final respBody = jsonDecode(response.body);
+      return respBody["message"];
+
+
+    } catch(e) {
+      print(e);
+      return 'Error en el servidor';
+    }
+
+
+  }
+  Future<List<Chat>> getAllMyChatsForSales() async{
+    String token = await AuthService.getToken();
+    try {
+      final response = await http.get('http://${Env.ip}:${Env.port}/chat/topic/getAll',
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token
+          }
+      );
+      final getAllMyChats = getAllMyChatsForSaleResponseFromJson(response.body);
+      return getAllMyChats.chats;
+
+    } catch(e) {
+      print(e);
+      return [];
+    }
   }
 
 }

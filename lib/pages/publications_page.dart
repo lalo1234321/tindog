@@ -53,13 +53,15 @@ class _PublicationsPageState extends State<PublicationsPage> {
                     'location':sales[i].location,
                     'ownerId': sales[i].pet.owner,
                     'stars': sales[i].pet.stars,
-                    'encounters': sales[i].pet.meetingsNumber
+                    'encounters': sales[i].pet.meetingsNumber,
+                    'price': sales[i].price
                   });
 
                 },
                 child: ListTile(
+                  focusColor: Colors.blue[100],
                   title: Text('\$${sales[i].price}'),
-                  subtitle: Text(sales[i].pet.username),
+                  subtitle: Text('${sales[i].pet.username}  \nEspecie: ${sales[i].pet.specie}      Raza: ${sales[i].pet.breed}'),
                   trailing: CircleAvatar(
                     backgroundImage: NetworkImage('http://'+result),
                   ),

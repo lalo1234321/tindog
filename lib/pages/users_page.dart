@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:tindog/helpers/env.dart';
+import 'package:tindog/models/get_all_my_chats_for_sale_response.dart';
 import 'package:tindog/models/retrieve_chat_response.dart';
 import 'package:tindog/models/usuario.dart';
+import 'package:tindog/services/auth_service.dart';
 import 'package:tindog/services/socket_service.dart';
 import 'package:tindog/services/user_service.dart';
 
@@ -145,4 +147,7 @@ class _UsersPageState extends State<UsersPage> {
     // await Future.delayed(Duration( milliseconds: 1000 ));
     _refreshController.refreshCompleted();
   }
+
+
+  
 }

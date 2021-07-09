@@ -18,7 +18,8 @@ class AuthService with ChangeNotifier {
   String myPetUserName;
   // static OwnedPet pet;
   static User user;
-   
+  static String idTo;
+  
   bool get autenticando => this._autenticando;
   set autenticando( bool valor ) {
     this._autenticando = valor;
@@ -139,6 +140,18 @@ class AuthService with ChangeNotifier {
   }
   Future logout() async{
     AndroidDeviceInfo androidInfo = await deviceInfoPlugin.androidInfo;
+    String lastToken = await getToken();
+    final resp = await http.post('http://${Env.ip}:${Env.port}/savingSessionData', 
+      headers: {
+        'Content-Type': 'application/json',
+        'token': lastToken
+      },
+      body: jsonEncode({
+        'deviceInformation': androidInfo.model
+      })
+    );
+    print(resp.body);
+    print('My last token is $lastToken');
     print('My device info ${androidInfo.model}');
     await _storage.delete(key: 'token');
     await _storage.delete(key:'petName');
@@ -173,5 +186,16 @@ class AuthService with ChangeNotifier {
     final _storage = new FlutterSecureStorage();
     final petUserName = await _storage.read(key: 'petUserName');
     return petUserName;
+  }
+  Future<String> getInformationConection() async{
+    String token = await getToken();
+    final resp = await http.get('http://${Env.ip}:${Env.port}/getInformationConnection', 
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token
+      }
+    );
+    final response = jsonDecode(resp.body);
+    return response["message"];
   }
 }

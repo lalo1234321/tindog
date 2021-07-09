@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tindog/pages/chats_market_page.dart';
 import 'package:tindog/pages/publications_page.dart';
 import 'package:tindog/pages/sell_page.dart';
+import 'package:tindog/services/auth_service.dart';
 
 
 class MarketPlace extends StatefulWidget {
@@ -12,6 +14,8 @@ class _MarketPlaceState extends State<MarketPlace> {
   int page = 0;
   @override
   Widget build(BuildContext context) {
+    print('El id de la sesión actual es ${AuthService.user.id}');
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Compra y venta'),
@@ -49,7 +53,10 @@ class _MarketPlaceState extends State<MarketPlace> {
             icon: Icon(Icons.monetization_on,size: 30.0,),
             label: 'Vender Mascotas',
           ),
-          
+          BottomNavigationBarItem(
+            icon: Icon(Icons.chat,size: 30.0,),
+            label: 'Chatear',
+          ),
         ],
       ),
     );
@@ -72,6 +79,9 @@ class _MarketPlaceState extends State<MarketPlace> {
       // case 3: {
       //   return SettingsPage();
       // }
+      case 2: {
+        return ChatsMarketPage();
+      }
       break;
     }
   }
